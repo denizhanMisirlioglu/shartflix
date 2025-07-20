@@ -15,9 +15,13 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   @override
   Future<List<MovieModel>> getPopularMovies() async {
     final response = await client.get(
-      Uri.parse('https://caseapi.servicelabs.tech/api/v1/movies/popular'),
-      headers: {'Content-Type': 'application/json'},
+      Uri.parse('https://caseapi.servicelabs.tech/movie/list'),
+      headers: {
+        'Content-Type': 'application/json',
+        //'Authorization': 'Bearer $token', // token
+      },
     );
+
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
