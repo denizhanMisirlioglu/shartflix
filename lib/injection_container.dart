@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:shartflix/presentation/blocs/login_bloc/login_bloc.dart';
 
+import 'core/utils/token_storage.dart';
 import 'data/data_sources/movie_remote_data_source.dart';
 import 'data/repositories/movie_repository_impl.dart';
 import 'domain/repositories/movie_repository.dart';
@@ -12,6 +14,10 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Bloc
   sl.registerFactory(() => PopularMoviesBloc(sl()));
+  sl.registerFactory(() => LoginBloc(
+    loginUser: sl(),
+    tokenStorage: sl(),
+  ));
 
   // UseCase
   sl.registerLazySingleton(() => GetPopularMovies(sl()));
@@ -24,4 +30,9 @@ Future<void> init() async {
 
   // External (http client gibi)
   sl.registerLazySingleton(() => http.Client());
+
+
+ // token protection
+  sl.registerLazySingleton(() => TokenStorage());
+
 }

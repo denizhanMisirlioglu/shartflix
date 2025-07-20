@@ -1,13 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shartflix/presentation/blocs/login_bloc/login_state.dart';
+import 'package:shartflix/core/utils/token_storage.dart';
 
 import '../../../domain/use_cases/login_user.dart';
 import 'login_evet.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUser loginUser;
+  final TokenStorage tokenStorage;
 
-  LoginBloc({required this.loginUser}) : super(LoginInitial()) {
+  LoginBloc({required this.loginUser, required this.tokenStorage})
+      : super(LoginInitial()) {
     on<LoginButtonPressed>(_onLoginPressed);
   }
 
@@ -24,7 +27,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     result.fold(
           (failure) => emit(LoginFailure("Giriş başarısız oldu")),
-          (entity) => emit(LoginSuccess()),
+          (entity) async {
+        await tokenStorage.saveToken(entity.token); // ✅ token'ı sakla
+        emit(LoginSuccess());
+      },
     );
   }
 }

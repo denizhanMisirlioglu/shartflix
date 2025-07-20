@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'injection_container.dart' as di;
-import 'presentation/pages/popular_movies_page.dart';
-import 'presentation/blocs/popular_movies_bloc/popular_movies_bloc.dart';
+import 'presentation/pages/login_page.dart';
+import 'presentation/blocs/login_bloc/login_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Shartflix',
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (_) => di.sl<PopularMoviesBloc>(),
-        child: const PopularMoviesPage(),
+        create: (_) => di.sl<LoginBloc>(),
+        child: const LoginPage(),
       ),
     );
   }
