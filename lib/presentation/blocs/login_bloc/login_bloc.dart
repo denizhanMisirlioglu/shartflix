@@ -25,12 +25,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       password: event.password,
     ));
 
-    result.fold(
-          (failure) => emit(LoginFailure("Giriş başarısız oldu")),
+    await result.fold(
+          (failure) async {
+        emit(LoginFailure("Giriş başarısız oldu"));
+      },
           (entity) async {
-        await tokenStorage.saveToken(entity.token); // ✅ token'ı sakla
+        await tokenStorage.saveToken(entity.token);
         emit(LoginSuccess());
       },
     );
+
+
   }
 }

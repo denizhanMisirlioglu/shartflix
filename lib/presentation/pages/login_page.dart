@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shartflix/presentation/blocs/login_bloc/login_bloc.dart';
 import 'package:shartflix/presentation/blocs/login_bloc/login_state.dart';
+import 'package:shartflix/presentation/pages/register_page.dart';
 
+import '../../injection_container.dart';
 import '../blocs/login_bloc/login_evet.dart';
+import '../blocs/register_bloc/register_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -62,6 +65,22 @@ class _LoginPageState extends State<LoginPage> {
                       ? const CircularProgressIndicator(color: Colors.white)
                       : const Text("Giriş Yap"),
                 ),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (_) => sl<RegisterBloc>(),
+                          child: const RegisterPage(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text("Hesabın yok mu? Kayıt ol"),
+                ),
+
               ],
             );
           },

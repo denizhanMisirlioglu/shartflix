@@ -20,4 +20,14 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, void>> register(String email, String password, String fullName) async {
+    try {
+      await remoteDataSource.register(email, password, fullName);
+      return const Right(null); // boş başarı
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

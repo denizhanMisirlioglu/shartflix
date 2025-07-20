@@ -3,11 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:shartflix/data/models/login_model.dart';
 import 'package:shartflix/core/error/exception.dart';
 
-
 abstract class AuthRemoteDataSource {
   Future<LoginModel> login(String email, String password);
+  Future<void> register(String email, String password, String fullName);
 }
-
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final http.Client client;
@@ -25,10 +24,47 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }),
     );
 
+    print('📡 Login response status: ${response.statusCode}');
+    print('📡 Login response body: ${response.body}');
+
+    final decoded = jsonDecode(response.body);
+
     if (response.statusCode == 200) {
-      return LoginModel.fromJson(jsonDecode(response.body));
+      final data = decoded['data'];
+      if (data == null || data is! Map<String, dynamic>) {
+        throw Exception("Login yanıtı geçersiz: 'data' alanı eksik veya yanlış formatta.");
+      }
+      return LoginModel.fromJson(data);
     } else {
-      throw ServerException(); 
+      final errorMessage = decoded['response']?['message'] ?? 'Bilinmeyen hata';
+      throw Exception('Sunucu hatası: $errorMessage');
     }
   }
+
+
+
+
+
+  @override
+  Future<void> register(String email, String password, String fullName) async {
+    final response = await client.post(
+      Uri.parse('https://caseapi.servicelabs.tech/user/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+        'name': fullName, // 🔧 DÜZELTİLDİ
+      }),
+    );
+
+    print("📡 Register response status: ${response.statusCode}");
+    print("📡 Register response body: ${response.body}");
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw ServerException();
+    }
+
+  }
+
+
 }
