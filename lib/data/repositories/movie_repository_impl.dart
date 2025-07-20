@@ -10,13 +10,16 @@ class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<MovieEntity>>> getPopularMovies() async {
+  Future<Either<Failure, List<MovieEntity>>> getMovies({
+    int page = 1,
+    required String token,
+  }) async {
     try {
-      final models = await remoteDataSource.getPopularMovies();
+      final models = await remoteDataSource.getMovies(page: page, token: token);
       final entities = models.map((m) => m.toEntity()).toList();
       return Right(entities);
     } catch (e) {
-      return Left(ServerFailure()); // Failure sınıfı core/error içinde olmalı
+      return Left(ServerFailure());
     }
   }
 }

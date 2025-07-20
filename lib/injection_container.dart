@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:shartflix/domain/use_cases/get_movies.dart';
+import 'package:shartflix/presentation/blocs/popular_movies_bloc/movie_bloc.dart';
 import 'package:shartflix/presentation/blocs/register_bloc/register_bloc.dart';
 
 import 'core/utils/token_storage.dart';
@@ -16,14 +18,13 @@ import 'presentation/blocs/login_bloc/login_bloc.dart';
 import 'data/data_sources/movie_remote_data_source.dart';
 import 'data/repositories/movie_repository_impl.dart';
 import 'domain/repositories/movie_repository.dart';
-import 'domain/use_cases/get_popular_movies.dart';
-import 'presentation/blocs/popular_movies_bloc/popular_movies_bloc.dart';
+
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   //  Bloc
-  sl.registerFactory(() => PopularMoviesBloc(sl()));
+  sl.registerFactory(() => MovieBloc(sl()));
   sl.registerFactory(() => LoginBloc(
     loginUser: sl(),
     tokenStorage: sl(),
@@ -31,7 +32,7 @@ Future<void> init() async {
   sl.registerFactory(() => RegisterBloc(registerUser: sl()));
 
   // ⚙ UseCases
-  sl.registerLazySingleton(() => GetPopularMovies(sl()));
+  sl.registerLazySingleton(() => GetMovies(sl()));
   sl.registerLazySingleton(() => LoginUser(sl())); //
   sl.registerLazySingleton(() => RegisterUser(sl()));
 
