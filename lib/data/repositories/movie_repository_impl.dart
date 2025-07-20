@@ -15,10 +15,12 @@ class MovieRepositoryImpl implements MovieRepository {
     required String token,
   }) async {
     try {
-      final models = await remoteDataSource.getMovies(page: page, token: token);
-      final entities = models.map((m) => m.toEntity()).toList();
-      return Right(entities);
-    } catch (e) {
+      final movieModels = await remoteDataSource.getMovies(page: page, token: token);
+      final movieEntities = movieModels.map((m) => m.toEntity()).toList();
+      return Right(movieEntities);
+    } catch (e, stackTrace) {
+      print('❌ Repository getMovies() error: $e');
+      print('📍 Stack trace: $stackTrace');
       return Left(ServerFailure());
     }
   }

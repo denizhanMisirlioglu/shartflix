@@ -1,68 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../domain/entities/movie_entity.dart';
+import '../../../injection_container.dart';
 import '../blocs/popular_movies_bloc/movie_bloc.dart';
 import '../blocs/popular_movies_bloc/movie_event.dart';
 import '../blocs/popular_movies_bloc/movie_state.dart';
+import '../widgets/movie_card.dart';
 
+class MovieListPage extends StatelessWidget {
+  final String token;
 
-class MovieListPage extends StatefulWidget {
-  const MovieListPage({Key? key}) : super(key: key);
-
-  @override
-  State<MovieListPage> createState() => _MovieListPageState();
-}
-
-class _MovieListPageState extends State<MovieListPage> {
-  @override
-  void initState() {
-    super.initState();
-    _loadTokenAndFetchMovies();
-  }
-
-  void _loadTokenAndFetchMovies() async {
-    const storage = FlutterSecureStorage();
-    final token = await storage.read(key: 'token');
-
-    if (!mounted) return;
-
-    if (token != null) {
-      context.read<MovieBloc>().add(FetchMovies(token: token));
-    } else {
-      debugPrint("❌ Token bulunamadı.");
-    }
-  }
+  const MovieListPage({super.key, required this.token});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Filmler"),
-      ),
-      body: BlocBuilder<MovieBloc, MovieState>(
-        builder: (context, state) {
-          if (state is MovieLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is MovieLoaded) {
-            return ListView.builder(
-              itemCount: state.movies.length,
-              itemBuilder: (context, index) {
-                final MovieEntity movie = state.movies[index];
-                return ListTile(
-                  leading: Image.network(movie.posterUrl),
-                  title: Text(movie.title),
-                  subtitle: Text(movie.description),
-                );
-              },
-            );
-          } else if (state is MovieError) {
-            return Center(child: Text('Hata: ${state.message}'));
-          } else {
-            return const SizedBox();
-          }
-        },
+    return BlocProvider(
+      create: (_) => sl<MovieBloc>()..add(FetchMovies(token: token)),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Filmler'),
+        ),
+        body: BlocBuilder<MovieBloc, MovieState>(
+          builder: (context, state) {
+            if (state is MovieLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is MovieLoaded) {
+              final movies = state.movies;
+              return ListView.builder(
+                itemCount: movies.length,
+                itemBuilder: (context, index) {
+                  final movie = movies[index];
+                  return MovieCard(
+                    title: movie.title,
+                    releaseDate: movie.releaseDate,
+                    posterUrl: movie.posterUrl, // ✅
+                  );
+
+                },
+              );
+            } else if (state is MovieError) {
+              return Center(child: Text(state.message));
+            } else {
+              return const SizedBox(); // boş state fallback
+            }
+          },
+        ),
       ),
     );
   }

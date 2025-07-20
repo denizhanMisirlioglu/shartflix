@@ -7,6 +7,7 @@ import 'package:shartflix/presentation/pages/register_page.dart';
 import '../../injection_container.dart';
 import '../blocs/login_bloc/login_evet.dart';
 import '../blocs/register_bloc/register_bloc.dart';
+import 'movie_list_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,10 +29,15 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Giriş Başarılı ✅")),
+              final token = state.token;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MovieListPage(token: token),
+                ),
               );
-            } else if (state is LoginFailure) {
+            }
+            else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Hata: ${state.message}")),
               );

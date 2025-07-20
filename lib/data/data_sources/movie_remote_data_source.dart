@@ -21,12 +21,24 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       },
     );
 
+    print('📡 Movie list response status: ${response.statusCode}');
+    print('📡 Movie list response body: ${response.body}');
+
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
-      final List movies = decoded['movies'];
-      return movies.map((json) => MovieModel.fromJson(json)).toList();
+
+      final moviesJson = decoded['data']['movies']; // ✅ içteki listeye erişim
+
+      if (moviesJson is List) {
+        return moviesJson.map((json) => MovieModel.fromJson(json)).toList();
+      } else {
+        print('❌ "movies" alanı beklenen liste formatında değil: ${moviesJson.runtimeType}');
+        throw Exception('API response "movies" alanı liste değil!');
+      }
     } else {
-      throw Exception('Failed to load movie list');
+      throw Exception('Failed to load movie list, status: ${response.statusCode}');
     }
   }
+
+
 }
