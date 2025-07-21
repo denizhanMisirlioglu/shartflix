@@ -16,7 +16,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       ) async {
     emit(UserProfileLoading());
     try {
-      final profile = await getUserProfile(event.token);
+      final profile = await getUserProfile.execute(event.token); // 🔧 fix burada
       emit(UserProfileLoaded(profile));
     } catch (e) {
       emit(UserProfileError(e.toString()));

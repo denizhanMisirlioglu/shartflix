@@ -4,6 +4,7 @@ import '../../domain/entities/user_profile_entity.dart';
 import '../blocs/user_profile_bloc/user_profile_bloc.dart';
 import '../blocs/user_profile_bloc/user_profile_event.dart';
 import '../blocs/user_profile_bloc/user_profile_state.dart';
+import '../../injection_container.dart';
 
 class ProfilePage extends StatelessWidget {
   final String token;
@@ -13,7 +14,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => UserProfileBloc(context.read())..add(FetchUserProfile(token)),
+      create: (_) => sl<UserProfileBloc>()..add(FetchUserProfile(token)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Profil Detayı'),
@@ -57,7 +58,7 @@ class ProfilePage extends StatelessWidget {
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 6, // Bloc üzerinden alınacaksa daha sonra bağlarız
+                      itemCount: 6, // ➕ Favoriler eklenince burası güncellenebilir
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.7,

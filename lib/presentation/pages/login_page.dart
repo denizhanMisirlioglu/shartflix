@@ -7,7 +7,7 @@ import 'package:shartflix/presentation/pages/register_page.dart';
 import '../../injection_container.dart';
 import '../blocs/login_bloc/login_evet.dart';
 import '../blocs/register_bloc/register_bloc.dart';
-import 'movie_list_page.dart';
+import 'main_navigation_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final emailController = TextEditingController(text: "kullanici@example.com");
+  final emailController = TextEditingController(text: "denizhan.misirlioglu@gmail.com");
   final passwordController = TextEditingController(text: "123456");
 
   @override
@@ -33,10 +33,11 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => MovieListPage(token: token),
+                  builder: (_) => MainNavigationPage(token: token),
                 ),
               );
             }
+
             else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Hata: ${state.message}")),

@@ -1,28 +1,15 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../data_sources/user_remote_data_source.dart';
-import '../models/user_profile_model.dart';
+import 'package:shartflix/domain/entities/user_profile_entity.dart';
+import 'package:shartflix/domain/repositories/user_repository.dart';
+import 'package:shartflix/data/data_sources/user_remote_data_source.dart';
 
-class UserRemoteDataSourceImpl implements UserRemoteDataSource {
-  final http.Client client;
+class UserRepositoryImpl implements UserRepository {
+  final UserRemoteDataSource remoteDataSource;
 
-  UserRemoteDataSourceImpl(this.client);
+  UserRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<UserProfileModel> getUserProfile(String token) async {
-    final response = await client.get(
-      Uri.parse('https://caseapi.servicelabs.tech/user/profile'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-      return UserProfileModel.fromJson(decoded);
-    } else {
-      throw Exception('Failed to fetch user profile');
-    }
+  Future<UserProfileEntity> getUserProfile(String token) async {
+    final model = await remoteDataSource.getUserProfile(token);
+    return model.toEntity();
   }
 }

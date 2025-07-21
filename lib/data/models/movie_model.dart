@@ -10,16 +10,12 @@ class MovieModel {
   @JsonKey(name: 'Title')
   final String title;
 
-  @JsonKey(name: 'Released')
-  final String releaseDate;
-
   @JsonKey(name: 'Poster')
   final String posterUrl;
 
   MovieModel({
     required this.id,
     required this.title,
-    required this.releaseDate,
     required this.posterUrl,
   });
 
@@ -32,7 +28,6 @@ class MovieModel {
     return MovieEntity(
       id: id,
       title: title,
-      releaseDate: releaseDate,
       posterUrl: posterUrl,
     );
   }

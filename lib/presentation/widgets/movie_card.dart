@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 class MovieCard extends StatelessWidget {
   final String title;
-  final String releaseDate;
   final String posterUrl;
 
   const MovieCard({
     super.key,
     required this.title,
-    required this.releaseDate,
     required this.posterUrl,
   });
 
@@ -41,7 +39,6 @@ class MovieCard extends StatelessWidget {
                 children: [
                   Text(title, style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),
-                  Text("Yayın Tarihi: $releaseDate"),
                 ],
               ),
             ),
