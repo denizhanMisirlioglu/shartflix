@@ -8,8 +8,8 @@ import '../blocs/user_profile_bloc/user_profile_state.dart';
 import '../blocs/favorite_movie_bloc/favorite_movie_bloc.dart';
 import '../blocs/favorite_movie_bloc/favorite_movie_event.dart';
 import '../blocs/favorite_movie_bloc/favorite_movie_state.dart';
-import '../blocs/upload_photo_bloc/upload_photo_bloc.dart'; // 🆕
-import '../pages/upload_photo_page.dart'; // 🆕
+import '../blocs/upload_photo_bloc/upload_photo_bloc.dart';
+import '../pages/upload_photo_page.dart';
 import '../widgets/compact_favorite_card.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -32,108 +32,118 @@ class ProfilePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Profil'),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BlocBuilder<UserProfileBloc, UserProfileState>(
-              builder: (context, state) {
-                if (state is UserProfileLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is UserProfileLoaded) {
-                  final user = state.profile;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(user.photoUrl),
-                          radius: 24,
-                        ),
-                        title: Text(user.name),
-                        subtitle: Text('ID: ${user.id}'),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider(
-                                    create: (_) => sl<UploadPhotoBloc>(),
-                                    child: UploadPhotoPage(token: token),
-                                  ),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: const Text('Fotoğraf Ekle'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                } else if (state is UserProfileError) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text('Hata: ${state.message}'),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Favori Filmler',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Expanded(
-              child: BlocBuilder<FavoriteMovieBloc, FavoriteMovieState>(
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocBuilder<UserProfileBloc, UserProfileState>(
                 builder: (context, state) {
-                  if (state is FavoriteMovieLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is FavoriteMovieError) {
-                    return Center(child: Text('Hata: ${state.message}'));
-                  } else if (state is FavoriteMovieLoaded) {
-                    final movies = state.movies;
-                    if (movies.isEmpty) {
-                      return const Center(child: Text("Henüz favori film yok."));
-                    }
-                    return ListView.builder(
-                      itemCount: movies.length,
-                      itemBuilder: (context, index) {
-                        final movie = movies[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: CompactFavoriteCard(
-                            title: movie.title,
-                            posterUrl: movie.posterUrl,
-                            onFavoriteToggle: () {
-                              context.read<FavoriteMovieBloc>().add(
-                                ToggleFavoriteMovie(token, movie.id),
-                              );
-                            },
+                  if (state is UserProfileLoading) {
+                    return const Center(child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      child: CircularProgressIndicator(),
+                    ));
+                  } else if (state is UserProfileLoaded) {
+                    final user = state.profile;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(user.photoUrl),
+                              radius: 30,
+                            ),
+                            title: Text(user.name),
+                            subtitle: Text('ID: ${user.id}'),
                           ),
-                        );
-                      },
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider(
+                                      create: (_) => sl<UploadPhotoBloc>(),
+                                      child: UploadPhotoPage(token: token),
+                                    ),
+                                  ),
+                                );
+
+                                if (result == true) {
+                                  context.read<UserProfileBloc>().add(FetchUserProfile(token));
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text('Fotoğraf Ekle'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is UserProfileError) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text('Hata: ${state.message}'),
                     );
                   } else {
                     return const SizedBox.shrink();
                   }
                 },
               ),
-            ),
-          ],
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Favori Filmler',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Expanded(
+                child: BlocBuilder<FavoriteMovieBloc, FavoriteMovieState>(
+                  builder: (context, state) {
+                    if (state is FavoriteMovieLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is FavoriteMovieError) {
+                      return Center(child: Text('Hata: ${state.message}'));
+                    } else if (state is FavoriteMovieLoaded) {
+                      final movies = state.movies;
+                      if (movies.isEmpty) {
+                        return const Center(child: Text("Henüz favori film yok."));
+                      }
+                      return ListView.builder(
+                        itemCount: movies.length,
+                        itemBuilder: (context, index) {
+                          final movie = movies[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            child: CompactFavoriteCard(
+                              title: movie.title,
+                              posterUrl: movie.posterUrl,
+                              onFavoriteToggle: () {
+                                context.read<FavoriteMovieBloc>().add(
+                                  ToggleFavoriteMovie(token, movie.id),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

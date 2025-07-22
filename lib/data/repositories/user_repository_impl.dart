@@ -17,12 +17,11 @@ class UserRepositoryImpl implements UserRepository {
     return model.toEntity();
   }
 
-  // 🆕 Yeni metot: fotoğraf yükleme
   @override
   Future<UploadPhotoResponse> uploadPhoto(File file, String token) async {
+    print('📤 Repository: uploadPhoto() çağrıldı → Dosya: ${file.path}');
     final model = await remoteDataSource.uploadPhoto(file, token);
+    print('✅ Repository: Fotoğraf yüklendi → URL: ${model.photoUrl}');
     return UploadPhotoResponse(photoUrl: model.photoUrl);
   }
-
-
 }

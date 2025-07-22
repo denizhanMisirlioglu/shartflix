@@ -48,9 +48,9 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
       listener: (context, state) {
         if (state is UploadPhotoSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Fotoğraf yüklendi ✅')),
+            const SnackBar(content: Text('Fotoğraf yüklendi ✅')),
           );
-          // Profil sayfasına yönlendirme yapılabilir
+          Navigator.pop(context, true); // ✅ Sayfayı true ile kapat
         } else if (state is UploadPhotoFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Hata: ${state.message}')),
@@ -65,7 +65,6 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
               child: Column(
                 children: [
-                  // Geri Dön Butonu
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(

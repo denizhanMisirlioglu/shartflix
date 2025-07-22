@@ -16,11 +16,15 @@ class UploadPhotoBloc extends Bloc<UploadPhotoEvent, UploadPhotoState> {
       UploadPhotoRequested event,
       Emitter<UploadPhotoState> emit,
       ) async {
+    print('📤 UploadPhotoBloc: Event alındı → Dosya: ${event.file.path}');
     emit(UploadPhotoLoading());
+
     try {
       final response = await uploadPhotoUseCase.execute(event.file, event.token);
+      print('✅ UploadPhotoBloc: Fotoğraf başarıyla yüklendi → ${response.photoUrl}');
       emit(UploadPhotoSuccess(response.photoUrl));
     } catch (e) {
+      print('❌ UploadPhotoBloc: Hata oluştu → $e');
       emit(UploadPhotoFailure(e.toString()));
     }
   }
