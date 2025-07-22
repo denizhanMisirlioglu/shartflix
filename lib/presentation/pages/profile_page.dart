@@ -8,6 +8,8 @@ import '../blocs/user_profile_bloc/user_profile_state.dart';
 import '../blocs/favorite_movie_bloc/favorite_movie_bloc.dart';
 import '../blocs/favorite_movie_bloc/favorite_movie_event.dart';
 import '../blocs/favorite_movie_bloc/favorite_movie_state.dart';
+import '../blocs/upload_photo_bloc/upload_photo_bloc.dart'; // 🆕
+import '../pages/upload_photo_page.dart'; // 🆕
 import '../widgets/compact_favorite_card.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -39,13 +41,44 @@ class ProfilePage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is UserProfileLoaded) {
                   final user = state.profile;
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(user.photoUrl),
-                      radius: 24,
-                    ),
-                    title: Text(user.name),
-                    subtitle: Text('ID: ${user.id}'),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(user.photoUrl),
+                          radius: 24,
+                        ),
+                        title: Text(user.name),
+                        subtitle: Text('ID: ${user.id}'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider(
+                                    create: (_) => sl<UploadPhotoBloc>(),
+                                    child: UploadPhotoPage(token: token),
+                                  ),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text('Fotoğraf Ekle'),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 } else if (state is UserProfileError) {
                   return Padding(

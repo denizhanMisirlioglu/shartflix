@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:shartflix/presentation/blocs/upload_photo_bloc/upload_photo_bloc.dart';
 
 import 'core/utils/token_storage.dart';
 
@@ -9,6 +10,7 @@ import 'data/repositories/auth_repository_impl.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/use_cases/login_user.dart';
 import 'domain/use_cases/register_user.dart';
+import 'domain/use_cases/upload_photo.dart';
 import 'presentation/blocs/login_bloc/login_bloc.dart';
 import 'presentation/blocs/register_bloc/register_bloc.dart';
 
@@ -50,6 +52,9 @@ Future<void> init() async {
   ));
   sl.registerFactory(() => UserProfileBloc(sl()));
 
+
+  sl.registerFactory(() => UploadPhotoBloc(sl()));
+
   // ⚙ UseCases
   sl.registerLazySingleton(() => GetMovies(sl()));
   sl.registerLazySingleton(() => LoginUser(sl()));
@@ -83,4 +88,12 @@ Future<void> init() async {
 
   // 🌍 External
   sl.registerLazySingleton(() => http.Client());
+
+
+  sl.registerLazySingleton(() => UploadPhoto(sl()));
+
+
+
+
+
 }

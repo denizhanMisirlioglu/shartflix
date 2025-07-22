@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 
+import '../models/upload_photo_model.dart';
 import '../models/user_profile_model.dart';
 
 abstract class UserRemoteDataSource {
   Future<UserProfileModel> getUserProfile(String token);
+  Future<UploadPhotoModel> uploadPhoto(File file, String token); // 🆕 eklendi
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -26,6 +31,37 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       return UserProfileModel.fromJson(jsonMap['data']);
     } else {
       throw Exception('Kullanıcı profili alınamadı: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<UploadPhotoModel> uploadPhoto(File file, String token) async {
+    final uri = Uri.parse('https://caseapi.servicelabs.tech/user/upload_photo');
+
+    final request = http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] = 'Bearer $token';
+
+    final mimeType = lookupMimeType(file.path) ?? 'image/jpeg';
+    final mediaType = MediaType.parse(mimeType);
+
+    request.files.add(await http.MultipartFile.fromPath(
+      'file',
+      file.path,
+      contentType: mediaType,
+    ));
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      final jsonMap = json.decode(response.body);
+      return UploadPhotoModel.fromJson(jsonMap);
+    } else if (response.statusCode == 400) {
+      throw Exception("Geçersiz dosya formatı");
+    } else if (response.statusCode == 401) {
+      throw Exception("Yetkisiz erişim");
+    } else {
+      throw Exception("Fotoğraf yüklenemedi (${response.statusCode})");
     }
   }
 }
