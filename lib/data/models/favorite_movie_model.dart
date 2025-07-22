@@ -1,39 +1,48 @@
-import 'package:json_annotation/json_annotation.dart';
 import '../../../domain/entities/favorite_movie_entity.dart';
 
-part 'favorite_movie_model.g.dart';
-
-@JsonSerializable()
-class FavoriteMovieModel {
-  final String id;
-  final String title;
+class FavoriteMovieModel extends FavoriteMovieEntity {
   final String description;
-  final String posterUrl;
 
   const FavoriteMovieModel({
-    required this.id,
-    required this.title,
+    required String id,
+    required String title,
+    required String posterUrl,
     required this.description,
-    required this.posterUrl,
-  });
-
-  factory FavoriteMovieModel.fromJson(Map<String, dynamic> json) =>
-      _$FavoriteMovieModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FavoriteMovieModelToJson(this);
-
-  FavoriteMovieEntity toEntity() => FavoriteMovieEntity(
+  }) : super(
     id: id,
     title: title,
-    description: description,
     posterUrl: posterUrl,
   );
 
-  factory FavoriteMovieModel.fromEntity(FavoriteMovieEntity entity) =>
-      FavoriteMovieModel(
-        id: entity.id,
-        title: entity.title,
-        description: entity.description,
-        posterUrl: entity.posterUrl,
-      );
+  factory FavoriteMovieModel.fromJson(Map<String, dynamic> json) {
+    final title = json['Title']?.toString();
+    final posterUrl = json['Poster']?.toString();
+
+    print('✅ Parsed title: $title');
+    print('✅ Parsed posterUrl: $posterUrl');
+
+    return FavoriteMovieModel(
+      id: json['id']?.toString() ?? '',
+      title: title ?? '',
+      posterUrl: posterUrl ?? '',
+      description: json['Plot']?.toString() ?? '', // "Plot" alanı description yerine kullanılabilir
+    );
+  }
+
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'Title': title,
+    'Poster': posterUrl,
+    'Plot': description,
+  };
+
+  factory FavoriteMovieModel.fromEntity(FavoriteMovieEntity entity) {
+    return FavoriteMovieModel(
+      id: entity.id,
+      title: entity.title,
+      posterUrl: entity.posterUrl,
+      description: '',
+    );
+  }
 }

@@ -61,7 +61,6 @@ class _FavoriteMovieItem extends StatelessWidget {
         errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
       ),
       title: Text(movie.title),
-      subtitle: Text(movie.description),
       trailing: IconButton(
         icon: const Icon(Icons.favorite, color: Colors.red),
         onPressed: () {

@@ -17,6 +17,9 @@ class FavoriteMovieLoaded extends FavoriteMovieState {
 
   const FavoriteMovieLoaded(this.movies);
 
+
+  Set<String> get favoriteMovieIds => movies.map((e) => e.id).toSet();
+
   @override
   List<Object> get props => [movies];
 }

@@ -13,10 +13,14 @@ class MovieModel {
   @JsonKey(name: 'Poster')
   final String posterUrl;
 
-  MovieModel({
+  @JsonKey(name: 'Plot')
+  final String description;
+
+  const MovieModel({
     required this.id,
     required this.title,
     required this.posterUrl,
+    required this.description,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json) =>
@@ -24,12 +28,12 @@ class MovieModel {
 
   Map<String, dynamic> toJson() => _$MovieModelToJson(this);
 
-  MovieEntity toEntity() {
-    return MovieEntity(
-      id: id,
-      title: title,
-      posterUrl: posterUrl,
-    );
-  }
+  MovieEntity toEntity() => MovieEntity(
+    id: id,
+    title: title,
+    posterUrl: posterUrl,
+    description: description,
+  );
 }
+
 

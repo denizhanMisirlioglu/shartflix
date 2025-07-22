@@ -43,10 +43,19 @@ class FavoriteMovieRemoteDataSourceImpl implements FavoriteMovieRemoteDataSource
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
-      final List<dynamic> movies = decoded['movies'];
-      return movies.map((json) => FavoriteMovieModel.fromJson(json)).toList();
+      final moviesJson = decoded['data'];
+
+      if (moviesJson == null || moviesJson is! List) {
+        print("⚠️ getFavoriteMovies: 'data' alanı boş ya da liste değil");
+        return [];
+      }
+
+      print("📥 getFavoriteMovies: ${moviesJson.length} favori film alındı");
+      return moviesJson.map((json) => FavoriteMovieModel.fromJson(json)).toList();
     } else {
       throw Exception('Favori filmler alınamadı: ${response.body}');
     }
   }
+
+
 }
