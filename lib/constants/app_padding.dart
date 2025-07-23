@@ -44,4 +44,11 @@ class AppPadding {
 
   // Açıklama ile “Daha Fazlası” bağlantısı arası boşluk
   static const double descriptionToMoreSpacing = 2.0;
+
+  static const double favoriteCardHorizontalSpacing = 15.66;
+  static const double favoriteCardTitleSpacing = 16.0;
+  static const double favoriteCardVerticalSpacing = 65.21;
+  static const double profileImageNameSpacing = 9.56;
+  static const double offerPhotoButtonSpacing = 55.34;
+  static const double backButtonTitleSpacing = 87.71;
 }

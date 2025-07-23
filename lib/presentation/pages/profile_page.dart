@@ -1,5 +1,4 @@
-// ⬇️ Bu kodu tekrar profile_page.dart içine yapıştır
-// (senin en son gönderdiğin güncel `ProfilePage` versiyonudur)
+// ⬇️ Güncellenmiş ProfilePage (Figma ile birebir uyumlu)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,25 +44,51 @@ class ProfilePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Stack(
+                  alignment: Alignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (onBackToHome != null) {
-                          onBackToHome!();
-                        }
-                      },
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color.fromRGBO(255, 255, 255, 0.1),
-                          border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.2)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (onBackToHome != null) {
+                              onBackToHome!();
+                            }
+                          },
+                          child: Container(
+                            width: 44,
+                            height: 44,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: const Color.fromRGBO(255, 255, 255, 0.1),
+                              border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.2)),
+                            ),
+                            child: const Icon(Icons.arrow_back, color: Colors.white),
+                          ),
                         ),
-                        child: const Icon(Icons.arrow_back, color: Colors.white),
-                      ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFE50914),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.local_offer, size: 16, color: Colors.white),
+                              SizedBox(width: 4),
+                              Text(
+                                'Sınırlı Teklif',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                     const Text(
                       'Profil Detayı',
@@ -74,27 +99,6 @@ class ProfilePage extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFE50914),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.local_offer, size: 16, color: Colors.white),
-                          SizedBox(width: 4),
-                          Text(
-                            'Sınırlı Teklif',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -105,6 +109,7 @@ class ProfilePage extends StatelessWidget {
                     } else if (state is UserProfileLoaded) {
                       final user = state.profile;
                       return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
                             radius: 31,
@@ -114,6 +119,7 @@ class ProfilePage extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const SizedBox(height: 9.56),
                               Text(
                                 user.name,
                                 style: const TextStyle(
@@ -125,7 +131,7 @@ class ProfilePage extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'ID: ${user.id}',
+                                'ID: ${user.id.substring(0, 6)}',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Color.fromRGBO(255, 255, 255, 0.5),
@@ -152,12 +158,16 @@ class ProfilePage extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFE50914),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 10),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
+                              minimumSize: const Size(121, 36),
                             ),
-                            child: const Text('Fotoğraf Ekle'),
+                            child: const Text(
+                              'Fotoğraf Ekle',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
                       );
@@ -166,16 +176,21 @@ class ProfilePage extends StatelessWidget {
                     }
                   },
                 ),
-                const SizedBox(height: 32),
-                const Text(
-                  'Beğendiğim Filmler',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'EuclidCircularA',
-                    color: Colors.white,
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Beğendiğim Filmler',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'EuclidCircularA',
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
+
                 const SizedBox(height: 16),
                 BlocBuilder<FavoriteMovieBloc, FavoriteMovieState>(
                   builder: (context, state) {
@@ -192,8 +207,8 @@ class ProfilePage extends StatelessWidget {
                       }
                       return GridView.count(
                         crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 15.66,
+                        mainAxisSpacing: 25,
                         childAspectRatio: 153.13 / 213.82,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
