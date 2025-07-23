@@ -9,6 +9,7 @@ import '../blocs/popular_movies_bloc/movie_bloc.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+import '../../constants/colors.dart';
 
 class MainNavigationPage extends StatefulWidget {
   final String token;
@@ -44,13 +45,16 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
         ),
       ),
       child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            HomePage(token: widget.token),
-            ProfilePage(token: widget.token),
-          ],
+        backgroundColor: AppColors.background, // 🎨 Arka plan rengi (#090909)
+        body: SafeArea( // 📱 Çentikli cihaz desteği
+          child: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              HomePage(token: widget.token),
+              ProfilePage(token: widget.token),
+            ],
+          ),
         ),
         bottomNavigationBar: CustomBottomNavBar(
           currentIndex: _currentIndex,

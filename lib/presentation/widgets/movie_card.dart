@@ -33,7 +33,16 @@ class MovieCard extends StatelessWidget {
           Image.network(
             posterUrl,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.white)),
+            errorBuilder: (_, __, ___) {
+              final backupFileName = title
+                  .toLowerCase()
+                  .replaceAll(" ", "_")
+                  .replaceAll(RegExp(r'[^\w_]'), '');
+              return Image.asset(
+                'assets/backup_posters/$backupFileName.webp',
+                fit: BoxFit.cover,
+              );
+            },
           ),
 
           // 🌫️ Gradient Overlay
@@ -50,37 +59,39 @@ class MovieCard extends StatelessWidget {
             ),
           ),
 
-          // 📄 İçerik (Başlık, Açıklama, Daha Fazlası)
+          // 📄 Ortalanmış İçerik
           Padding(
-            padding: AppPadding.movieCardContent,
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              bottom: AppPadding.movieCardBottom,
+            ),
             child: Align(
-              alignment: Alignment.bottomLeft,
+              alignment: Alignment.bottomCenter,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 🧠 Başlık
                   Text(
                     title,
                     style: AppTextStyles.movieTitle,
                     maxLines: 1,
+                    textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: AppPadding.titleToDescriptionSpacing),
-
-                  // 📖 Açıklama
                   Text(
                     description,
                     style: AppTextStyles.movieDescription,
                     maxLines: 2,
+                    textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: AppPadding.descriptionToMoreSpacing),
-
-                  // 🔗 Daha Fazlası
                   Text(
                     "Daha Fazlası",
                     style: AppTextStyles.moreLink,
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
@@ -89,41 +100,23 @@ class MovieCard extends StatelessWidget {
 
           // ❤️ Favori Butonu
           Positioned(
-            bottom: AppPadding.favoriteButton.bottom,
-            right: AppPadding.favoriteButton.right,
-            child: Container(
-              width: 49,
-              height: 71.7,
-              decoration: BoxDecoration(
-                color: AppColors.favoriteButtonBackground,
-                border: Border.all(color: AppColors.white20),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: IconButton(
-                icon: Icon(
+            bottom: 100,
+            right: 18,
+            child: GestureDetector(
+              onTap: onFavoriteToggle,
+              child: Container(
+                width: 49,
+                height: 71.7,
+                decoration: BoxDecoration(
+                  color: AppColors.favoriteButtonBackground,
+                  border: Border.all(color: AppColors.white20),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? Colors.red : Colors.white,
+                  color: Colors.white, // 💡 Artık içi dolu olan da beyaz!
                   size: 24,
                 ),
-                onPressed: onFavoriteToggle,
-              ),
-            ),
-          ),
-
-          // 🟣 Logo (sol üstte, opsiyonel)
-          Positioned(
-            top: 40,
-            left: 20,
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 1.5),
-                shape: BoxShape.circle,
-                color: Colors.transparent,
-              ),
-              child: const Center(
-                child: FlutterLogo(size: 24), // logo yerine kendi assetini koyabilirsin
               ),
             ),
           ),

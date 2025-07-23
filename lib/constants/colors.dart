@@ -25,4 +25,13 @@ class AppColors {
   static const Color overlayBlackStart = Color(0xFF000000); // Gradient %100 siyah
   static const Color overlayBlackEnd = Color.fromRGBO(0, 0, 0, 0); // Gradient %0 siyah
   static const Color favoriteButtonBackground = Color.fromRGBO(0, 0, 0, 0.20); // %20 siyah
+
+
+  static const Color backgroundDark = Color(0xFF090909); // bottom nav bar zemini
+  static const Color favoriteButtonBorder = Color(0x33FFFFFF); // %20 beyaz (0x33 = 20% alpha)
+  static const Color bottomNavSelected = Colors.white; // aktif
+  static const Color bottomNavUnselected = Colors.white60; // pasif
+  static const Color navBarBackground = Color(0xFF090909);
+
+
 }

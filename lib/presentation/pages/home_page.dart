@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("🚀 FetchMovies (initial) çağrıldı");
       context.read<MovieBloc>().add(FetchMovies(token: widget.token));
     });
   }
@@ -36,20 +37,27 @@ class _HomePageState extends State<HomePage> {
 
             return RefreshIndicator(
               onRefresh: () async {
+                print("🔄 Pull-to-refresh tetiklendi");
                 context.read<MovieBloc>().add(FetchMovies(token: widget.token));
               },
               child: NotificationListener<ScrollNotification>(
                 onNotification: (scrollInfo) {
                   if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && canLoadMore) {
+                    print("📦 Scroll max'a ulaşıldı, FetchMoreMovies çağrıldı");
                     context.read<MovieBloc>().add(FetchMoreMovies(token: widget.token));
                   }
                   return false;
                 },
                 child: PageView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: movies.length,
+                  itemCount: canLoadMore ? movies.length + 1 : movies.length,
                   itemBuilder: (context, index) {
+                    if (index >= movies.length) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
                     final movie = movies[index];
+                    print("🎬 Film #$index: ${movie.title} - ${movie.posterUrl}");
                     return MovieCard(
                       title: movie.title,
                       description: movie.description,

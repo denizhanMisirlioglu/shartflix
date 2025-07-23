@@ -15,8 +15,11 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<MoviePageResult> getMovies({int page = 1, required String token}) async {
+    final url = 'https://caseapi.servicelabs.tech/movie/list?page=$page';
+    print('🌐 [GET] Request to: $url');
+
     final response = await client.get(
-      Uri.parse('https://caseapi.servicelabs.tech/movie/list?page=$page'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -24,7 +27,6 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
     );
 
     print('📡 Movie list response status: ${response.statusCode}');
-    print('📡 Movie list response body: ${response.body}');
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
@@ -34,9 +36,17 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       final currentPage = data['currentPage'] ?? 1;
       final totalPages = data['totalPages'] ?? 1;
 
+      print('✅ API response parsed');
+      print('📄 currentPage: $currentPage | totalPages: $totalPages | movies.length: ${moviesJson.length}');
+
       final movies = (moviesJson as List)
           .map((json) => MovieModel.fromJson(json).toEntity())
           .toList();
+
+      // Film başlığı ve poster logları
+      for (var movie in movies) {
+        print('🎬 [Movie] ${movie.title} → posterUrl: ${movie.posterUrl}');
+      }
 
       return MoviePageResult(
         movies: movies,
@@ -44,6 +54,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         totalPages: totalPages,
       );
     } else {
+      print('❌ Failed to load movie list, status: ${response.statusCode}');
       throw Exception('Failed to load movie list, status: ${response.statusCode}');
     }
   }
