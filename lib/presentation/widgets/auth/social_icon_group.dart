@@ -8,33 +8,40 @@ class SocialIconGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       alignment: WrapAlignment.center,
-      spacing: 16, // ikonlar arası yatay boşluk
-      runSpacing: 12, // dar ekranlarda alt alta geçerse dikey boşluk
+      spacing: 16,
+      runSpacing: 12,
       children: const [
-        SocialIcon(icon: Icons.g_mobiledata),
-        SocialIcon(icon: Icons.apple),
-        SocialIcon(icon: Icons.facebook),
+        SocialIcon(assetPath: 'assets/icons/google_icon.png'),
+        SocialIcon(assetPath: 'assets/icons/apple_icon.png'), // varsa
+        SocialIcon(assetPath: 'assets/icons/facebook_icon.png'),
       ],
     );
   }
 }
 
 class SocialIcon extends StatelessWidget {
-  final IconData icon;
+  final String assetPath;
 
-  const SocialIcon({super.key, required this.icon});
+  const SocialIcon({super.key, required this.assetPath});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 64,
-      height: 64,
+      width: 60,
+      height: 60,
       decoration: BoxDecoration(
         color: AppColors.inputBackground,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.socialIconBorder),
+        border: Border.all(color: AppColors.inputBorder),
+        borderRadius: BorderRadius.circular(18),
       ),
-      child: Icon(icon, color: AppColors.white, size: 32),
+      child: Center(
+        child: Image.asset(
+          assetPath,
+          width: 30,
+          height: 30,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 }

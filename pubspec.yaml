@@ -33,5 +33,6 @@ flutter:
   assets:
     - assets/images/sinflix_logo.png
     - assets/images/sinflix_splash.png
-    - assets/icons/google.png
-    - assets/icons/facebook.png
+    - assets/icons/google_icon.png
+    - assets/icons/facebook_icon.png
+    - assets/icons/apple_icon.png

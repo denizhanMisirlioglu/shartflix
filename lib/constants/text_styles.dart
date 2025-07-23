@@ -6,7 +6,7 @@ class AppTextStyles {
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: AppColors.white,
-    height: 1.2, // Satır yüksekliği (görsel uyum için)
+    height: 1.2,
   );
 
   static const TextStyle subtitle = TextStyle(
@@ -31,7 +31,6 @@ class AppTextStyles {
     decorationStyle: TextDecorationStyle.solid,
   );
 
-
   static const TextStyle buttonText = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -49,5 +48,27 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.bold,
     color: AppColors.white,
+  );
+
+  // 🎬 Discover (Movie Card) İçin
+  static const TextStyle movieTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.white,
+    height: 1.0,
+  );
+
+  static const TextStyle movieDescription = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: AppColors.white75,
+    height: 1.4,
+  );
+
+  static const TextStyle moreLink = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w700,
+    color: AppColors.white,
+    height: 1.4,
   );
 }

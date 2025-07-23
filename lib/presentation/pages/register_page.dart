@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shartflix/constants/app_padding.dart';
+import 'package:shartflix/constants/colors.dart';
+import 'package:shartflix/constants/text_styles.dart';
 import 'package:shartflix/presentation/blocs/register_bloc/register_bloc.dart';
 import 'package:shartflix/presentation/blocs/register_bloc/register_event.dart';
 import 'package:shartflix/presentation/blocs/register_bloc/register_state.dart';
+import 'package:shartflix/presentation/pages/login_page.dart';
+import '../widgets/auth/custom_input_field.dart';
+import '../widgets/auth/social_icon_group.dart';
+import '../widgets/auth/form_header.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -12,63 +19,176 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final fullNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final nameController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  bool isPasswordHidden = true;
+  bool isConfirmPasswordHidden = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Kayıt Ol")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocConsumer<RegisterBloc, RegisterState>(
-          listener: (context, state) {
-            if (state is RegisterSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Kayıt başarılı ✅")),
-              );
-              Navigator.pop(context); // Giriş sayfasına geri dön
-            } else if (state is RegisterFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            }
-          },
-          builder: (context, state) {
-            return Column(
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: "Ad Soyad"),
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppPadding.horizontal),
+                    child: BlocConsumer<RegisterBloc, RegisterState>(
+                      listener: (context, state) {
+                        if (state is RegisterSuccess) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => const LoginPage()),
+                          );
+                        } else if (state is RegisterFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Hata: ${state.message}")),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(height: 60),
+                            const FormHeader(
+                              title: "Hoşgeldiniz",
+                              subtitle: "Tempus varius a vitae interdum id tortor\n"
+                                  "elementum tristique eleifend at.",
+                            ),
+                            const SizedBox(height: 36),
+                            CustomInputField(
+                              controller: fullNameController,
+                              icon: Icons.person,
+                              hintText: "Ad Soyad",
+                            ),
+                            const SizedBox(height: 13.63),
+                            CustomInputField(
+                              controller: emailController,
+                              icon: Icons.email,
+                              hintText: "E-Posta",
+                            ),
+                            const SizedBox(height: 13.63),
+                            CustomInputField(
+                              controller: passwordController,
+                              icon: Icons.lock,
+                              hintText: "Şifre",
+                              obscureText: isPasswordHidden,
+                              suffixIcon: isPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                              onSuffixTap: () {
+                                setState(() {
+                                  isPasswordHidden = !isPasswordHidden;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 13.63),
+                            CustomInputField(
+                              controller: confirmPasswordController,
+                              icon: Icons.lock,
+                              hintText: "Şifre Tekrar",
+                              obscureText: isConfirmPasswordHidden,
+                              suffixIcon: isConfirmPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                              onSuffixTap: () {
+                                setState(() {
+                                  isConfirmPasswordHidden = !isConfirmPasswordHidden;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            RichText(
+                              text: TextSpan(
+                                text: "Kullanıcı sözleşmesini ",
+                                style: AppTextStyles.registerText,
+                                children: const [
+                                  TextSpan(
+                                    text: "okudum ve kabul ediyorum.",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " Bu sözleşmeyi okuyarak devam ediniz lütfen.",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            SizedBox(
+                              height: AppPadding.buttonHeight,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  final password = passwordController.text.trim();
+                                  final confirmPassword = confirmPasswordController.text.trim();
+
+                                  if (password != confirmPassword) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Şifreler eşleşmiyor"),
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  context.read<RegisterBloc>().add(
+                                    RegisterButtonPressed(
+                                      fullName: fullNameController.text.trim(),
+                                      email: emailController.text.trim(),
+                                      password: password,
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.brandRed,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(AppPadding.inputRadius),
+                                  ),
+                                ),
+                                child: state is RegisterLoading
+                                    ? const CircularProgressIndicator(color: Colors.white)
+                                    : Text("Şimdi Kaydol", style: AppTextStyles.buttonText),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            const SocialIconGroup(),
+                            const SizedBox(height: 39),
+                            Center(
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Text("Zaten bir hesabın var mı? ", style: AppTextStyles.registerText),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 4),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(builder: (_) => const LoginPage()),
+                                        );
+                                      },
+                                      child: Text("Giriş Yap!", style: AppTextStyles.registerBold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
                 ),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(labelText: "Email"),
-                ),
-                TextField(
-                  controller: passwordController,
-                  decoration: const InputDecoration(labelText: "Şifre"),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: state is RegisterLoading
-                      ? null
-                      : () {
-                    context.read<RegisterBloc>().add(
-                      RegisterButtonPressed(
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim(),
-                        fullName: nameController.text.trim(),
-                      ),
-                    );
-                  },
-                  child: state is RegisterLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text("Kayıt Ol"),
-                ),
-              ],
+              ),
             );
           },
         ),

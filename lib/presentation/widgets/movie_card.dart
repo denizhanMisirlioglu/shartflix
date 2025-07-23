@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../constants/app_padding.dart';
+import '../../constants/colors.dart';
+import '../../constants/text_styles.dart';
 
 class MovieCard extends StatelessWidget {
   final String title;
@@ -18,65 +21,113 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            // 🎬 Poster
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                posterUrl,
-                height: 100,
-                width: 70,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(Icons.image),
+    final screenSize = MediaQuery.of(context).size;
+
+    return SizedBox(
+      height: screenSize.height,
+      width: screenSize.width,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // 🎞 Arka Plan Posteri
+          Image.network(
+            posterUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.white)),
+          ),
+
+          // 🌫️ Gradient Overlay
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  AppColors.overlayBlackStart,
+                  AppColors.overlayBlackEnd,
+                ],
               ),
             ),
-            const SizedBox(width: 12),
+          ),
 
-            // 📄 Başlık + Açıklama
-            Expanded(
+          // 📄 İçerik (Başlık, Açıklama, Daha Fazlası)
+          Padding(
+            padding: AppPadding.movieCardContent,
+            child: Align(
+              alignment: Alignment.bottomLeft,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 🧠 Başlık
                   Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                    style: AppTextStyles.movieTitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: AppPadding.titleToDescriptionSpacing),
+
+                  // 📖 Açıklama
                   Text(
                     description,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: AppTextStyles.movieDescription,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: AppPadding.descriptionToMoreSpacing),
+
+                  // 🔗 Daha Fazlası
+                  Text(
+                    "Daha Fazlası",
+                    style: AppTextStyles.moreLink,
                   ),
                 ],
               ),
             ),
+          ),
 
-            // ❤️ Kalp ikonu
-            IconButton(
-              icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: isFavorite ? Colors.red : Colors.grey,
+          // ❤️ Favori Butonu
+          Positioned(
+            bottom: AppPadding.favoriteButton.bottom,
+            right: AppPadding.favoriteButton.right,
+            child: Container(
+              width: 49,
+              height: 71.7,
+              decoration: BoxDecoration(
+                color: AppColors.favoriteButtonBackground,
+                border: Border.all(color: AppColors.white20),
+                borderRadius: BorderRadius.circular(16),
               ),
-              onPressed: () {
-                print("🟢 UI: Kalp ikonuna tıklandı → isFavorite: $isFavorite");
-                onFavoriteToggle();
-              },
+              child: IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : Colors.white,
+                  size: 24,
+                ),
+                onPressed: onFavoriteToggle,
+              ),
             ),
-          ],
-        ),
+          ),
+
+          // 🟣 Logo (sol üstte, opsiyonel)
+          Positioned(
+            top: 40,
+            left: 20,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 1.5),
+                shape: BoxShape.circle,
+                color: Colors.transparent,
+              ),
+              child: const Center(
+                child: FlutterLogo(size: 24), // logo yerine kendi assetini koyabilirsin
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

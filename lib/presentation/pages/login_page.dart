@@ -12,6 +12,7 @@ import '../blocs/login_bloc/login_evet.dart';
 import '../blocs/register_bloc/register_bloc.dart';
 import '../widgets/auth/custom_input_field.dart';
 import '../widgets/auth/social_icon_group.dart';
+import '../widgets/auth/form_header.dart'; // ✅ Eklendi
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,8 +28,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -61,12 +60,9 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const SizedBox(height: 100),
-                            Text("Merhabalar", style: AppTextStyles.heading, textAlign: TextAlign.center),
-                            const SizedBox(height: 8),
-                            Text(
-                              "Tempus varius a vitae interdum id\ntortor elementum tristique eleifend at.",
-                              style: AppTextStyles.subtitle,
-                              textAlign: TextAlign.center,
+                            const FormHeader( // ✅ Ortak başlık
+                              title: "Merhabalar",
+                              subtitle: "Tempus varius a vitae interdum id\ntortor elementum tristique eleifend at.",
                             ),
                             const SizedBox(height: 40),
                             CustomInputField(
@@ -90,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(height: 29.63),
                             Align(
                               alignment: Alignment.centerLeft,
-                              child:Text(
+                              child: Text(
                                 "Şifremi unuttum",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -98,10 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                                   decoration: TextDecoration.underline,
                                   decorationColor: Colors.white,
                                   decorationThickness: 1,
-                                  height: 1.4, //  en kritik değer
+                                  height: 1.4,
                                 ),
                               ),
-
                             ),
                             const SizedBox(height: 36.92),
                             SizedBox(
@@ -138,9 +133,19 @@ class _LoginPageState extends State<LoginPage> {
                                 children: [
                                   Text("Bir hesabın yok mu? ", style: AppTextStyles.registerText),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 4), // 🔧 boşluk eklendi
+                                    padding: const EdgeInsets.only(left: 4),
                                     child: GestureDetector(
-                                      onTap: () { /* yönlendirme */ },
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => BlocProvider(
+                                              create: (_) => sl<RegisterBloc>(),
+                                              child: const RegisterPage(),
+                                            ),
+                                          ),
+                                        );
+                                      },
                                       child: Text("Kayıt Ol!", style: AppTextStyles.registerBold),
                                     ),
                                   ),
