@@ -5,22 +5,23 @@ import 'package:shartflix/presentation/pages/login_page.dart';
 import 'package:shartflix/presentation/pages/main_navigation_page.dart';
 
 import 'injection_container.dart' as di;
-
 import 'presentation/blocs/login_bloc/login_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
 
-  final tokenStorage = di.sl<TokenStorage>();
-  final token = await tokenStorage.getToken();
+  // ✅ Daha sonra tekrar aktif etmek için:
+  // final tokenStorage = di.sl<TokenStorage>();
+  // final token = await tokenStorage.getToken();
+  // runApp(MyApp(initialToken: token));
 
-  runApp(MyApp(initialToken: token));
+  runApp(const MyApp()); // 🧪 Şimdilik sadece LoginPage gösteriyoruz
 }
 
 class MyApp extends StatelessWidget {
-  final String? initialToken;
-  const MyApp({super.key, required this.initialToken});
+  // final String? initialToken;
+  const MyApp({super.key}); // → Giriş ekranı test modu
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +30,18 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginBloc>(
           create: (_) => di.sl<LoginBloc>(),
         ),
-        // ❌ Diğer bloclar ilgili sayfalarda sağlanacak (örnek: ProfilePage)
       ],
       child: MaterialApp(
         title: 'Shartflix',
         debugShowCheckedModeBanner: false,
-        home: initialToken != null
-            ? MainNavigationPage(token: initialToken!)
-            : const LoginPage(),
+
+        // ✅ Şu an Login ekranını test ediyoruz
+        home: const LoginPage(),
+
+        // ✅ Gerçek akışta burası kullanılacak:
+        // home: initialToken != null
+        //     ? MainNavigationPage(token: initialToken!)
+        //     : const LoginPage(),
       ),
     );
   }
