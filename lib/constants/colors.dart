@@ -34,4 +34,11 @@ class AppColors {
   static const Color navBarBackground = Color(0xFF090909);
 
 
+  static const Color bonusCardBackground = Color.fromRGBO(0, 0, 0, 0.2);
+  static const Color bonusCardBorder = Color.fromRGBO(255, 255, 255, 0.1);
+  static const Color gradientStart = Color(0xFF5949E6); // mor
+  static const Color gradientEnd = Color(0xFFE50914);   // kırmızı
+  static const Color redDiscount = Color(0xFFE50914);
+
+
 }

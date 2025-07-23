@@ -1,4 +1,4 @@
-// ⬇️ Güncellenmiş ProfilePage (Figma ile birebir uyumlu)
+// ⬇️ Güncellenmiş ProfilePage (Figma ile birebir uyumlu + Bottom Sheet entegrasyonu)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +13,7 @@ import '../blocs/favorite_movie_bloc/favorite_movie_state.dart';
 import '../blocs/upload_photo_bloc/upload_photo_bloc.dart';
 import '../pages/upload_photo_page.dart';
 import '../widgets/favorite_movie_card.dart';
+import '../widgets/limited_offer/limited_offer_bottom_sheet.dart';
 
 class ProfilePage extends StatelessWidget {
   final String token;
@@ -67,25 +68,35 @@ class ProfilePage extends StatelessWidget {
                             child: const Icon(Icons.arrow_back, color: Colors.white),
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE50914),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: const Row(
-                            children: [
-                              Icon(Icons.local_offer, size: 16, color: Colors.white),
-                              SizedBox(width: 4),
-                              Text(
-                                'Sınırlı Teklif',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (_) => const LimitedOfferBottomSheet(),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE50914),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(Icons.local_offer, size: 16, color: Colors.white),
+                                SizedBox(width: 4),
+                                Text(
+                                  'Sınırlı Teklif',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -190,7 +201,6 @@ class ProfilePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-
                 const SizedBox(height: 16),
                 BlocBuilder<FavoriteMovieBloc, FavoriteMovieState>(
                   builder: (context, state) {
