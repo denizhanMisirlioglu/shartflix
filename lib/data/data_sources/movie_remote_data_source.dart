@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../../domain/entities/movie_page_result.dart';
+import '../../../domain/entities/movie_entity.dart';
 import '../models/movie_model.dart';
 
 abstract class MovieRemoteDataSource {
-  Future<List<MovieModel>> getMovies({int page = 1, required String token});
+  Future<MoviePageResult> getMovies({int page = 1, required String token});
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -12,7 +14,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   MovieRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<MovieModel>> getMovies({int page = 1, required String token}) async {
+  Future<MoviePageResult> getMovies({int page = 1, required String token}) async {
     final response = await client.get(
       Uri.parse('https://caseapi.servicelabs.tech/movie/list?page=$page'),
       headers: {
@@ -26,19 +28,23 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
+      final data = decoded['data'];
 
-      final moviesJson = decoded['data']['movies']; // ✅ içteki listeye erişim
+      final moviesJson = data['movies'] ?? [];
+      final currentPage = data['currentPage'] ?? 1;
+      final totalPages = data['totalPages'] ?? 1;
 
-      if (moviesJson is List) {
-        return moviesJson.map((json) => MovieModel.fromJson(json)).toList();
-      } else {
-        print('❌ "movies" alanı beklenen liste formatında değil: ${moviesJson.runtimeType}');
-        throw Exception('API response "movies" alanı liste değil!');
-      }
+      final movies = (moviesJson as List)
+          .map((json) => MovieModel.fromJson(json).toEntity())
+          .toList();
+
+      return MoviePageResult(
+        movies: movies,
+        currentPage: currentPage,
+        totalPages: totalPages,
+      );
     } else {
       throw Exception('Failed to load movie list, status: ${response.statusCode}');
     }
   }
-
-
 }

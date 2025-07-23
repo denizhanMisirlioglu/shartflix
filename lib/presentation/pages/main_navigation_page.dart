@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:shartflix/presentation/pages/profile_page.dart';
-import 'package:shartflix/presentation/widgets/custom_bottom_nav_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
-import 'package:shartflix/presentation/pages/home_page.dart';
+import '../../data/data_sources/movie_remote_data_source.dart';
+import '../../data/repositories/movie_repository_impl.dart';
+import '../../domain/use_cases/get_movies.dart';
+import '../blocs/popular_movies_bloc/movie_bloc.dart';
+import 'home_page.dart';
+import 'profile_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class MainNavigationPage extends StatefulWidget {
   final String token;
@@ -29,18 +35,27 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          HomePage(token: widget.token),
-          ProfilePage(token: widget.token),
-        ],
+    return BlocProvider(
+      create: (_) => MovieBloc(
+        GetMovies(
+          MovieRepositoryImpl(
+            remoteDataSource: MovieRemoteDataSourceImpl(client: http.Client()),
+          ),
+        ),
       ),
-      bottomNavigationBar: CustomBottomNavBar( // ✅ güncellendi
-        currentIndex: _currentIndex,
-        onTap: _onTap,
+      child: Scaffold(
+        body: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            HomePage(token: widget.token),
+            ProfilePage(token: widget.token),
+          ],
+        ),
+        bottomNavigationBar: CustomBottomNavBar(
+          currentIndex: _currentIndex,
+          onTap: _onTap,
+        ),
       ),
     );
   }

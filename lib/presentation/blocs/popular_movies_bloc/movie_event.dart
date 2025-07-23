@@ -16,3 +16,12 @@ class FetchMovies extends MovieEvent {
   @override
   List<Object> get props => [page, token];
 }
+
+class FetchMoreMovies extends MovieEvent {
+  final String token;
+
+  const FetchMoreMovies({required this.token});
+
+  @override
+  List<Object> get props => [token];
+}

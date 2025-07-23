@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import '../../domain/entities/movie_page_result.dart';
 import '../../domain/entities/movie_entity.dart';
 import '../../domain/repositories/movie_repository.dart';
 import '../../../core/error/failure.dart';
@@ -10,14 +11,15 @@ class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<MovieEntity>>> getMovies({
+  Future<Either<Failure, MoviePageResult>> getMovies({
     int page = 1,
     required String token,
   }) async {
     try {
-      final movieModels = await remoteDataSource.getMovies(page: page, token: token);
-      final movieEntities = movieModels.map((m) => m.toEntity()).toList();
-      return Right(movieEntities);
+      final result = await remoteDataSource.getMovies(page: page, token: token);
+
+      // Eğer API'den gelen verilerde eksiklik varsa yine de MoviePageResult dön
+      return Right(result);
     } catch (e, stackTrace) {
       print('❌ Repository getMovies() error: $e');
       print('📍 Stack trace: $stackTrace');

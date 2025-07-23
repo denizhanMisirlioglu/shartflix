@@ -14,11 +14,19 @@ class MovieLoading extends MovieState {}
 
 class MovieLoaded extends MovieState {
   final List<MovieEntity> movies;
+  final int currentPage;
+  final int totalPages;
 
-  const MovieLoaded(this.movies);
+  const MovieLoaded({
+    required this.movies,
+    required this.currentPage,
+    required this.totalPages,
+  });
+
+  bool get canLoadMore => currentPage < totalPages;
 
   @override
-  List<Object> get props => [movies];
+  List<Object> get props => [movies, currentPage, totalPages];
 }
 
 class MovieError extends MovieState {
