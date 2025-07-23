@@ -25,10 +25,9 @@ class FavoriteMovieModel extends FavoriteMovieEntity {
       id: json['id']?.toString() ?? '',
       title: title ?? '',
       posterUrl: posterUrl ?? '',
-      description: json['Plot']?.toString() ?? '', // "Plot" alanı description yerine kullanılabilir
+      description: json['Plot']?.toString() ?? '',
     );
   }
-
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -43,6 +42,15 @@ class FavoriteMovieModel extends FavoriteMovieEntity {
       title: entity.title,
       posterUrl: entity.posterUrl,
       description: '',
+    );
+  }
+
+  /// ✅ Eksik olan toEntity metodu eklendi:
+  FavoriteMovieEntity toEntity() {
+    return FavoriteMovieEntity(
+      id: id,
+      title: title,
+      posterUrl: posterUrl,
     );
   }
 }

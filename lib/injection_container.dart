@@ -59,8 +59,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetMovies(sl()));
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
-  sl.registerLazySingleton(() => GetFavoriteMoviesUseCase(sl()));
-  sl.registerLazySingleton(() => ToggleFavoriteMovieUseCase(sl()));
+  sl.registerLazySingleton(() => GetFavoriteMoviesUseCase(sl<FavoriteMovieRepository>()));
+  sl.registerLazySingleton(() => ToggleFavoriteMovieUseCase(sl<FavoriteMovieRepository>()));
+
   sl.registerLazySingleton(() => GetUserProfile(sl()));
 
   // 🧱 Repositories

@@ -21,7 +21,7 @@ class FavoriteMovieRepositoryImpl implements FavoriteMovieRepository {
   Future<List<FavoriteMovieEntity>> getFavoriteMovies(String token) async {
     try {
       final models = await remoteDataSource.getFavoriteMovies(token);
-      return models;
+      return models.map((model) => model.toEntity()).toList(); // ✅ Gerekli dönüşüm
     } catch (e) {
       throw Exception('Favori filmler alınamadı: $e');
     }

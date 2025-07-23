@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/popular_movies_bloc/movie_bloc.dart';
 import '../blocs/popular_movies_bloc/movie_event.dart';
 import '../blocs/popular_movies_bloc/movie_state.dart';
+import '../blocs/favorite_movie_bloc/favorite_movie_bloc.dart';
+import '../blocs/favorite_movie_bloc/favorite_movie_event.dart';
+import '../blocs/favorite_movie_bloc/favorite_movie_state.dart';
 import '../widgets/movie_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,8 +22,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("🚀 FetchMovies (initial) çağrıldı");
       context.read<MovieBloc>().add(FetchMovies(token: widget.token));
+      context.read<FavoriteMovieBloc>().add(LoadFavoriteMovies(widget.token));
     });
   }
 
@@ -28,52 +31,65 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<MovieBloc, MovieState>(
-        builder: (context, state) {
-          if (state is MovieLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is MovieLoaded) {
-            final movies = state.movies;
-            final canLoadMore = state.canLoadMore;
+        builder: (context, movieState) {
+          return BlocBuilder<FavoriteMovieBloc, FavoriteMovieState>(
+            builder: (context, favoriteState) {
+              if (movieState is MovieLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (movieState is MovieLoaded) {
+                final movies = movieState.movies;
+                final canLoadMore = movieState.canLoadMore;
 
-            return RefreshIndicator(
-              onRefresh: () async {
-                print("🔄 Pull-to-refresh tetiklendi");
-                context.read<MovieBloc>().add(FetchMovies(token: widget.token));
-              },
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollInfo) {
-                  if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && canLoadMore) {
-                    print("📦 Scroll max'a ulaşıldı, FetchMoreMovies çağrıldı");
-                    context.read<MovieBloc>().add(FetchMoreMovies(token: widget.token));
-                  }
-                  return false;
-                },
-                child: PageView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: canLoadMore ? movies.length + 1 : movies.length,
-                  itemBuilder: (context, index) {
-                    if (index >= movies.length) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+                List<String> favoriteIds = [];
+                if (favoriteState is FavoriteMovieLoaded) {
+                  favoriteIds = favoriteState.movies.map((m) => m.id).toList();
+                }
 
-                    final movie = movies[index];
-                    print("🎬 Film #$index: ${movie.title} - ${movie.posterUrl}");
-                    return MovieCard(
-                      title: movie.title,
-                      description: movie.description,
-                      posterUrl: movie.posterUrl,
-                      isFavorite: false,
-                      onFavoriteToggle: () {},
-                    );
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<MovieBloc>().add(FetchMovies(token: widget.token));
+                    context.read<FavoriteMovieBloc>().add(LoadFavoriteMovies(widget.token));
                   },
-                ),
-              ),
-            );
-          } else if (state is MovieError) {
-            return Center(child: Text(state.message));
-          } else {
-            return const SizedBox();
-          }
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (scrollInfo) {
+                      if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent && canLoadMore) {
+                        context.read<MovieBloc>().add(FetchMoreMovies(token: widget.token));
+                      }
+                      return false;
+                    },
+                    child: PageView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: canLoadMore ? movies.length + 1 : movies.length,
+                      itemBuilder: (context, index) {
+                        if (index >= movies.length) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+
+                        final movie = movies[index];
+                        final isFavorite = favoriteIds.contains(movie.id);
+
+                        return MovieCard(
+                          title: movie.title,
+                          description: movie.description,
+                          posterUrl: movie.posterUrl,
+                          isFavorite: isFavorite,
+                          onFavoriteToggle: () {
+                            context.read<FavoriteMovieBloc>().add(
+                              ToggleFavoriteMovie(widget.token, movie.id), // ✅ positional olarak çağrıldı
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else if (movieState is MovieError) {
+                return Center(child: Text(movieState.message));
+              } else {
+                return const SizedBox();
+              }
+            },
+          );
         },
       ),
     );

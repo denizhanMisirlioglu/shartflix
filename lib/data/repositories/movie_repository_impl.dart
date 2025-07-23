@@ -17,8 +17,6 @@ class MovieRepositoryImpl implements MovieRepository {
   }) async {
     try {
       final result = await remoteDataSource.getMovies(page: page, token: token);
-
-      // Eğer API'den gelen verilerde eksiklik varsa yine de MoviePageResult dön
       return Right(result);
     } catch (e, stackTrace) {
       print('❌ Repository getMovies() error: $e');
