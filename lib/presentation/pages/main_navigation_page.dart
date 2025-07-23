@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:shartflix/presentation/pages/profile_page.dart';
 
 import '../../data/data_sources/movie_remote_data_source.dart';
 import '../../data/repositories/movie_repository_impl.dart';
@@ -15,7 +16,6 @@ import '../../presentation/blocs/favorite_movie_bloc/favorite_movie_bloc.dart';
 import '../../presentation/blocs/favorite_movie_bloc/favorite_movie_event.dart';
 
 import 'home_page.dart';
-import 'profile_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../../constants/colors.dart';
 
@@ -74,7 +74,10 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               HomePage(token: widget.token),
-              ProfilePage(token: widget.token),
+              ProfilePage(
+                token: widget.token,
+                onBackToHome: () => _onTap(0),
+              ),
             ],
           ),
         ),
