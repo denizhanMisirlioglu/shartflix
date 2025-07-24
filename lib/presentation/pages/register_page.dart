@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart'; // ✅ Eklendi
+import 'package:lottie/lottie.dart';
 import 'package:shartflix/constants/app_padding.dart';
 import 'package:shartflix/constants/colors.dart';
 import 'package:shartflix/constants/text_styles.dart';
@@ -24,8 +24,41 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+
   bool isPasswordHidden = true;
   bool isConfirmPasswordHidden = true;
+  bool registerButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fullNameController.addListener(_updateButtonState);
+    emailController.addListener(_updateButtonState);
+    passwordController.addListener(_updateButtonState);
+    confirmPasswordController.addListener(_updateButtonState);
+  }
+
+  void _updateButtonState() {
+    final isEnabled = fullNameController.text.trim().isNotEmpty &&
+        emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty &&
+        confirmPasswordController.text.trim().isNotEmpty;
+
+    if (registerButtonEnabled != isEnabled) {
+      setState(() {
+        registerButtonEnabled = isEnabled;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    fullNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   fit: BoxFit.contain,
                                   onLoaded: (composition) {
                                     Future.delayed(composition.duration, () {
-                                      Navigator.of(context).pop(); // dialogu kapat
+                                      Navigator.of(context).pop();
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (_) => const LoginPage()),
@@ -146,7 +179,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             SizedBox(
                               height: AppPadding.buttonHeight,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: registerButtonEnabled
+                                    ? () {
                                   final password = passwordController.text.trim();
                                   final confirmPassword = confirmPasswordController.text.trim();
 
@@ -165,6 +199,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                       fullName: fullNameController.text.trim(),
                                       email: emailController.text.trim(),
                                       password: password,
+                                    ),
+                                  );
+                                }
+                                    : () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Lütfen tüm alanları doldurun."),
+                                      behavior: SnackBarBehavior.floating,
                                     ),
                                   );
                                 },
