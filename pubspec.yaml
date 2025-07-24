@@ -26,6 +26,8 @@ dev_dependencies:
   build_runner: ^2.5.4
   json_serializable: ^6.7.1
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -39,3 +41,18 @@ flutter:
     - assets/backup_posters/
     - assets/icons/limited_offer/
     - assets/images/glow_effect_circle.png
+
+flutter_native_splash:
+  color: "#000000"
+  image: assets/images/sinflix_splash_full.png
+  android_gravity: fill
+  fullscreen: true
+  android: true
+  ios: true
+
+  android_12:
+    image: assets/images/sinflix_splash_full.png
+    icon_background_color: "#000000"
+    branding: null
+
+

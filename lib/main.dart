@@ -9,9 +9,11 @@ import 'presentation/blocs/login_bloc/login_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
   await di.init();
 
-  // ✅ Daha sonra tekrar aktif etmek için:
+
   // final tokenStorage = di.sl<TokenStorage>();
   // final token = await tokenStorage.getToken();
   // runApp(MyApp(initialToken: token));
@@ -34,14 +36,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Shartflix',
         debugShowCheckedModeBanner: false,
-
-        // ✅ Şu an Login ekranını test ediyoruz
         home: const LoginPage(),
-
-        // ✅ Gerçek akışta burası kullanılacak:
-        // home: initialToken != null
-        //     ? MainNavigationPage(token: initialToken!)
-        //     : const LoginPage(),
       ),
     );
   }
