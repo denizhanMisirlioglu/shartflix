@@ -13,23 +13,38 @@ class LimitedOfferBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.topCenter,
       children: [
+        // Yarı saydam siyah layer (gerçek opacity)
+        Opacity(
+          opacity: 0.80, // Burada oranı ayarlayabilirsin (0.70-0.95 arası dene)
+          child: Container(color: Colors.black),
+        ),
+
+        // Glow efekti: üstte ve içerik arkasında
         Positioned(
-          top: -120,
-          child: Container(
-            width: 240,
-            height: 240,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xFFE50914),
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 180, sigmaY: 180),
-              child: const SizedBox(),
+          top: 0,
+          left: 0,
+          right: 0,
+          child: IgnorePointer(
+            child: Center(
+              child: Container(
+                width: 217,
+                height: 217,
+                margin: const EdgeInsets.only(top: 40),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFE50914).withOpacity(0.8),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 216, sigmaY: 216),
+                  child: const SizedBox(),
+                ),
+              ),
             ),
           ),
         ),
+
+        // Asıl içerik (bottom sheet)
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -92,7 +107,7 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(AppLocalizations.of(context)!.selectTokenPackageTitle, style: AppTextStyles.sectionTitle),
-                const SizedBox(height: 32), // <-- BURASI ARTIK 32
+                const SizedBox(height: 32),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
