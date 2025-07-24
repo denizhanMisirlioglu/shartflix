@@ -30,7 +30,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       final jsonMap = json.decode(response.body);
       return UserProfileModel.fromJson(jsonMap['data']);
     } else {
-      throw Exception('Kullanıcı profili alınamadı: ${response.statusCode}');
+      throw Exception('error.getProfileFailed');
     }
   }
 
@@ -62,11 +62,11 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       final jsonMap = json.decode(response.body);
       return UploadPhotoModel.fromJson(jsonMap);
     } else if (response.statusCode == 400) {
-      throw Exception("Geçersiz dosya formatı");
+      throw Exception("error.invalidFileFormat");
     } else if (response.statusCode == 401) {
-      throw Exception("Yetkisiz erişim");
+      throw Exception("error.unauthorized");
     } else {
-      throw Exception("Fotoğraf yüklenemedi (${response.statusCode})");
+      throw Exception("error.uploadPhotoFailed");
     }
   }
 }

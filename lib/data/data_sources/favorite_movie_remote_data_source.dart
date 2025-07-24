@@ -25,7 +25,7 @@ class FavoriteMovieRemoteDataSourceImpl implements FavoriteMovieRemoteDataSource
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Favori işlemi başarısız: ${response.body}');
+      throw Exception('error.toggleFavoriteFailed');
     }
   }
 
@@ -53,9 +53,7 @@ class FavoriteMovieRemoteDataSourceImpl implements FavoriteMovieRemoteDataSource
       print("📥 getFavoriteMovies: ${moviesJson.length} favori film alındı");
       return moviesJson.map((json) => FavoriteMovieModel.fromJson(json)).toList();
     } else {
-      throw Exception('Favori filmler alınamadı: ${response.body}');
+      throw Exception('error.getFavoritesFailed');
     }
   }
-
-
 }

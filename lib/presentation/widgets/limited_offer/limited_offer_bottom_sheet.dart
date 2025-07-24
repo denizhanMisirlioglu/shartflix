@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../../constants/colors.dart';
 import '../../../constants/text_styles.dart';
 import 'bonus_icon_item.dart';
@@ -13,7 +15,6 @@ class LimitedOfferBottomSheet extends StatelessWidget {
     return Stack(
       alignment: Alignment.topCenter,
       children: [
-        // 🔴 Dairesel Glow Efekti
         Positioned(
           top: -120,
           child: Container(
@@ -29,8 +30,6 @@ class LimitedOfferBottomSheet extends StatelessWidget {
             ),
           ),
         ),
-
-        // 🧱 İçerik Kutusu
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -44,18 +43,14 @@ class LimitedOfferBottomSheet extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 8),
-
-                // Başlık
-                Text("Sınırlı Teklif", style: AppTextStyles.heading),
+                Text(AppLocalizations.of(context)!.limitedOfferTitle, style: AppTextStyles.heading),
                 const SizedBox(height: 8),
                 Text(
-                  "Jeton paketi’ni seçerek bonus kazanın ve yeni bölümlerin kilidini açın!",
+                  AppLocalizations.of(context)!.limitedOfferDescription,
                   style: AppTextStyles.subtitle,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-
-                // 🎁 Bonuslar
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   decoration: BoxDecoration(
@@ -68,27 +63,27 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Text("Alacağınız Bonuslar", style: AppTextStyles.sectionTitle),
+                      Text(AppLocalizations.of(context)!.bonusSectionTitle, style: AppTextStyles.sectionTitle),
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
+                        children: [
                           BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/premium.png',
-                            label: 'Premium\nHesap',
+                            label: AppLocalizations.of(context)!.bonusPremiumAccount,
                             isLarge: true,
                           ),
                           BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/match.png',
-                            label: 'Daha\nFazla Eşleşme',
+                            label: AppLocalizations.of(context)!.bonusMoreMatches,
                           ),
                           BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/boost.png',
-                            label: 'Öne\nÇıkarma',
+                            label: AppLocalizations.of(context)!.bonusBoost,
                           ),
                           BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/like.png',
-                            label: 'Daha\nFazla Beğeni',
+                            label: AppLocalizations.of(context)!.bonusMoreLikes,
                           ),
                         ],
                       ),
@@ -96,12 +91,8 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // Jeton Başlık
-                Text("Kilidi açmak için bir jeton paketi seçin", style: AppTextStyles.sectionTitle),
+                Text(AppLocalizations.of(context)!.selectTokenPackageTitle, style: AppTextStyles.sectionTitle),
                 const SizedBox(height: 16),
-
-                // Jeton Paketleri
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -134,8 +125,6 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // Alt Buton
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -147,8 +136,8 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {},
-                    child: const Text(
-                      "Tüm Jetonları Gör",
+                    child: Text(
+                      AppLocalizations.of(context)!.seeAllTokens,
                       style: AppTextStyles.buttonText,
                     ),
                   ),

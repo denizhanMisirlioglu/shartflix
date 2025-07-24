@@ -23,7 +23,7 @@ import 'presentation/blocs/popular_movies_bloc/movie_bloc.dart';
 
 // FAVORITES
 import 'data/data_sources/favorite_movie_remote_data_source.dart';
-import 'data/repositories/favorite_movie_reposityory_impl.dart'; // 💡 yazım hatalı dosya adı ama bozulmadan bırakıldı
+import 'data/repositories/favorite_movie_reposityory_impl.dart'; // yazım hatalı dosya adı ama bozulmadan bırakıldı
 import 'domain/repositories/favorite_movie_repository.dart';
 import 'domain/use_cases/get_favorite_movies.dart';
 import 'domain/use_cases/toggle_favorite_movie.dart';
@@ -39,7 +39,7 @@ import 'presentation/blocs/user_profile_bloc/user_profile_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // 🔧 Blocs
+  // Blocs
   sl.registerFactory(() => MovieBloc(sl()));
   sl.registerFactory(() => LoginBloc(
     loginUser: sl(),
@@ -51,30 +51,27 @@ Future<void> init() async {
     toggleFavorite: sl(),
   ));
   sl.registerFactory(() => UserProfileBloc(sl()));
-
-
   sl.registerFactory(() => UploadPhotoBloc(sl()));
 
-  // ⚙ UseCases
+  // UseCases
   sl.registerLazySingleton(() => GetMovies(sl()));
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
   sl.registerLazySingleton(() => GetFavoriteMoviesUseCase(sl<FavoriteMovieRepository>()));
   sl.registerLazySingleton(() => ToggleFavoriteMovieUseCase(sl<FavoriteMovieRepository>()));
-
   sl.registerLazySingleton(() => GetUserProfile(sl()));
 
-  // 🧱 Repositories
+  // Repositories
   sl.registerLazySingleton<MovieRepository>(
           () => MovieRepositoryImpl(remoteDataSource: sl()));
   sl.registerLazySingleton<AuthRepository>(
           () => AuthRepositoryImpl(remoteDataSource: sl()));
   sl.registerLazySingleton<FavoriteMovieRepository>(
-          () => FavoriteMovieRepositoryImpl(remoteDataSource: sl())); // ✅ class adı doğru
+          () => FavoriteMovieRepositoryImpl(remoteDataSource: sl())); // class adı doğru
   sl.registerLazySingleton<UserRepository>(
           () => UserRepositoryImpl(remoteDataSource: sl()));
 
-  // 🗄️ DataSources
+  // DataSources
   sl.registerLazySingleton<MovieRemoteDataSource>(
           () => MovieRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -84,17 +81,11 @@ Future<void> init() async {
   sl.registerLazySingleton<UserRemoteDataSource>(
           () => UserRemoteDataSourceImpl(client: sl()));
 
-  // 🔐 Core
+  // Core
   sl.registerLazySingleton(() => TokenStorage());
 
-  // 🌍 External
+  // External
   sl.registerLazySingleton(() => http.Client());
 
-
   sl.registerLazySingleton(() => UploadPhoto(sl()));
-
-
-
-
-
 }

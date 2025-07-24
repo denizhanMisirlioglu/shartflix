@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LimitedOfferHeader extends StatelessWidget {
   const LimitedOfferHeader({super.key});
@@ -12,7 +13,6 @@ class LimitedOfferHeader extends StatelessWidget {
       alignment: Alignment.topCenter,
       clipBehavior: Clip.none,
       children: [
-        // Glow efekt (arkadaki blur)
         Positioned(
           top: -110,
           child: Image.asset(
@@ -22,13 +22,12 @@ class LimitedOfferHeader extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        // Başlık ve açıklama yazısı
         Column(
           children: [
             const SizedBox(height: 20),
             Text(
-              'Sınırlı Teklif',
-              style: TextStyle(
+              AppLocalizations.of(context)!.limitedOfferTitle,
+              style: const TextStyle(
                 fontSize: 20,
                 fontFamily: 'Euclid Circular A',
                 fontWeight: FontWeight.bold,
@@ -37,9 +36,9 @@ class LimitedOfferHeader extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Jeton paketini seçerek bonus kazan\nve yeni bölümlerin kilidini açın!',
+              AppLocalizations.of(context)!.limitedOfferDescription,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 fontFamily: 'Euclid Circular A',
                 color: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shartflix/constants/app_padding.dart';
 import 'package:shartflix/constants/colors.dart';
@@ -62,6 +63,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -104,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           );
                         } else if (state is RegisterFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Hata: ${state.message}")),
+                            SnackBar(content: Text("${local.registerErrorPrefix} ${state.message}")),
                           );
                         }
                       },
@@ -113,28 +116,27 @@ class _RegisterPageState extends State<RegisterPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const SizedBox(height: 60),
-                            const FormHeader(
-                              title: "Hoşgeldiniz",
-                              subtitle: "Tempus varius a vitae interdum id tortor\n"
-                                  "elementum tristique eleifend at.",
+                            FormHeader(
+                              title: local.registerWelcome,
+                              subtitle: local.registerSubtitle,
                             ),
                             const SizedBox(height: 36),
                             CustomInputField(
                               controller: fullNameController,
                               icon: Icons.person,
-                              hintText: "Ad Soyad",
+                              hintText: local.hintFullName,
                             ),
                             const SizedBox(height: 13.63),
                             CustomInputField(
                               controller: emailController,
                               icon: Icons.email,
-                              hintText: "E-Posta",
+                              hintText: local.hintEmail,
                             ),
                             const SizedBox(height: 13.63),
                             CustomInputField(
                               controller: passwordController,
                               icon: Icons.lock,
-                              hintText: "Şifre",
+                              hintText: local.hintPassword,
                               obscureText: isPasswordHidden,
                               suffixIcon: isPasswordHidden ? Icons.visibility_off : Icons.visibility,
                               onSuffixTap: () {
@@ -147,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             CustomInputField(
                               controller: confirmPasswordController,
                               icon: Icons.lock,
-                              hintText: "Şifre Tekrar",
+                              hintText: local.hintPasswordConfirm,
                               obscureText: isConfirmPasswordHidden,
                               suffixIcon: isConfirmPasswordHidden ? Icons.visibility_off : Icons.visibility,
                               onSuffixTap: () {
@@ -159,18 +161,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(height: 20),
                             RichText(
                               text: TextSpan(
-                                text: "Kullanıcı sözleşmesini ",
-                                style: AppTextStyles.registerText,
-                                children: const [
+                                text: "${local.agreementAcceptedBold} ",
+                                style: AppTextStyles.registerText.copyWith(color: Colors.white),
+                                children: [
                                   TextSpan(
-                                    text: "okudum ve kabul ediyorum.",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: " Bu sözleşmeyi okuyarak devam ediniz lütfen.",
+                                    text: local.agreementContinue,
+                                    style: AppTextStyles.registerText,
                                   ),
                                 ],
                               ),
@@ -186,8 +182,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                                   if (password != confirmPassword) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text("Şifreler eşleşmiyor"),
+                                      SnackBar(
+                                        content: Text(local.passwordMismatchError),
                                         behavior: SnackBarBehavior.floating,
                                       ),
                                     );
@@ -204,8 +200,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 }
                                     : () {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Lütfen tüm alanları doldurun."),
+                                    SnackBar(
+                                      content: Text(local.fillAllFieldsError),
                                       behavior: SnackBarBehavior.floating,
                                     ),
                                   );
@@ -218,7 +214,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ),
                                 child: state is RegisterLoading
                                     ? const CircularProgressIndicator(color: Colors.white)
-                                    : Text("Şimdi Kaydol", style: AppTextStyles.buttonText),
+                                    : Text(local.registerButtonText, style: AppTextStyles.buttonText),
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -229,7 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 alignment: WrapAlignment.center,
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 children: [
-                                  Text("Zaten bir hesabın var mı? ", style: AppTextStyles.registerText),
+                                  Text(local.alreadyHaveAccount, style: AppTextStyles.registerText),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 4),
                                     child: GestureDetector(
@@ -239,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           MaterialPageRoute(builder: (_) => const LoginPage()),
                                         );
                                       },
-                                      child: Text("Giriş Yap!", style: AppTextStyles.registerBold),
+                                      child: Text(local.loginNow, style: AppTextStyles.registerBold),
                                     ),
                                   ),
                                 ],

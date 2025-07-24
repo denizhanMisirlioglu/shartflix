@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../../constants/app_padding.dart';
 import '../../constants/colors.dart';
 import '../../constants/text_styles.dart';
@@ -29,7 +31,6 @@ class MovieCard extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // 🎞 Arka Plan Posteri
           Image.network(
             posterUrl,
             fit: BoxFit.cover,
@@ -45,7 +46,6 @@ class MovieCard extends StatelessWidget {
             },
           ),
 
-          // 🌫️ Gradient Overlay
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -59,7 +59,6 @@ class MovieCard extends StatelessWidget {
             ),
           ),
 
-          // 📄 Ortalanmış İçerik
           Padding(
             padding: const EdgeInsets.only(
               left: 20.0,
@@ -89,7 +88,7 @@ class MovieCard extends StatelessWidget {
                   ),
                   const SizedBox(height: AppPadding.descriptionToMoreSpacing),
                   Text(
-                    "Daha Fazlası",
+                    AppLocalizations.of(context)!.moreLabel,
                     style: AppTextStyles.moreLink,
                     textAlign: TextAlign.center,
                   ),
@@ -98,7 +97,6 @@ class MovieCard extends StatelessWidget {
             ),
           ),
 
-          // ❤️ Favori Butonu
           Positioned(
             bottom: 100,
             right: 18,
@@ -114,7 +112,7 @@ class MovieCard extends StatelessWidget {
                 ),
                 child: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.white, // 💡 Artık içi dolu olan da beyaz!
+                  color: Colors.white,
                   size: 24,
                 ),
               ),

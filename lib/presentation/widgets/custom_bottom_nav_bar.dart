@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../constants/colors.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -25,14 +27,14 @@ class CustomBottomNavBar extends StatelessWidget {
         children: [
           _buildNavItem(
             icon: Icons.home,
-            label: 'Anasayfa',
+            label: AppLocalizations.of(context)!.homeLabel,
             isSelected: currentIndex == 0,
             onTap: () => onTap(0),
           ),
-          const SizedBox(width: 16), // 🔧 Figma’ya göre boşluk
+          const SizedBox(width: 16),
           _buildNavItem(
             icon: Icons.person,
-            label: 'Profil',
+            label: AppLocalizations.of(context)!.profileLabel,
             isSelected: currentIndex == 1,
             onTap: () => onTap(1),
           ),

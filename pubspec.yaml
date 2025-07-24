@@ -20,7 +20,9 @@ dependencies:
   image_picker: ^1.0.4
   cupertino_icons: ^1.0.8
   lottie: ^3.0.0
-
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +47,8 @@ flutter:
     - assets/images/glow_effect_circle.png
     - assets/lottie/success.json
 
+  generate: true
+
 flutter_native_splash:
   color: "#000000"
   image: assets/images/sinflix_splash_full.png
@@ -56,6 +60,3 @@ flutter_native_splash:
   android_12:
     image: assets/images/sinflix_splash_full.png
     icon_background_color: "#000000"
-    branding: null
-
-

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:shartflix/constants/app_padding.dart';
 import 'package:shartflix/constants/colors.dart';
 import 'package:shartflix/constants/text_styles.dart';
@@ -41,6 +43,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -87,8 +91,8 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         } else if (state is LoginFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("E-posta veya şifre yanlış."),
+                            SnackBar(
+                              content: Text(loc.loginWrongCredentialsError),
                               backgroundColor: Colors.redAccent,
                             ),
                           );
@@ -99,21 +103,21 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const SizedBox(height: 100),
-                            const FormHeader(
-                              title: "Merhabalar",
-                              subtitle: "Tempus varius a vitae interdum id\ntortor elementum tristique eleifend at.",
+                            FormHeader(
+                              title: loc.loginTitle,
+                              subtitle: loc.loginSubtitle,
                             ),
                             const SizedBox(height: 40),
                             CustomInputField(
                               controller: emailController,
                               icon: Icons.email,
-                              hintText: "E-Posta",
+                              hintText: loc.emailHint,
                             ),
                             const SizedBox(height: 13.63),
                             CustomInputField(
                               controller: passwordController,
                               icon: Icons.lock,
-                              hintText: "Şifre",
+                              hintText: loc.passwordHint,
                               obscureText: isPasswordHidden,
                               suffixIcon: isPasswordHidden ? Icons.visibility_off : Icons.visibility,
                               onSuffixTap: () {
@@ -126,8 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "Şifremi unuttum",
-                                style: TextStyle(
+                                loc.forgotPassword,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
                                   decoration: TextDecoration.underline,
@@ -149,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
 
                                   if (email.isEmpty || password.isEmpty) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text("Lütfen e-posta ve şifre alanlarını doldurun."),
+                                      SnackBar(
+                                        content: Text(loc.loginFieldsEmptyError),
                                         backgroundColor: Colors.redAccent,
                                       ),
                                     );
@@ -173,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 child: state is LoginLoading
                                     ? const CircularProgressIndicator(color: Colors.white)
-                                    : Text("Giriş Yap", style: AppTextStyles.buttonText),
+                                    : Text(loc.loginButton, style: AppTextStyles.buttonText),
                               ),
                             ),
                             const SizedBox(height: 36.92),
@@ -184,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                 alignment: WrapAlignment.center,
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 children: [
-                                  Text("Bir hesabın yok mu? ", style: AppTextStyles.registerText),
+                                  Text(loc.noAccountText, style: AppTextStyles.registerText),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 4),
                                     child: GestureDetector(
@@ -199,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                         );
                                       },
-                                      child: Text("Kayıt Ol!", style: AppTextStyles.registerBold),
+                                      child: Text(loc.registerNow, style: AppTextStyles.registerBold),
                                     ),
                                   ),
                                 ],

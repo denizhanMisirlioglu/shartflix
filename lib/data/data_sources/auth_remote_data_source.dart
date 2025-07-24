@@ -31,12 +31,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (response.statusCode == 200) {
       final data = decoded['data'];
       if (data == null || data is! Map<String, dynamic>) {
-        throw Exception("Login yanıtı geçersiz: 'data' alanı eksik veya yanlış formatta.");
+        throw Exception("error.invalidLoginResponse"); // intl key
       }
       return LoginModel.fromJson(data);
     } else {
-      final errorMessage = decoded['response']?['message'] ?? 'Bilinmeyen hata';
-      throw Exception("Sunucu hatası: $errorMessage"); // ✅ Basit hata mesajı
+      final errorMessage = decoded['response']?['message'];
+      if (errorMessage != null &&
+          errorMessage.toString().toLowerCase().contains('not found')) {
+        throw Exception("error.loginUserNotFound"); // intl key
+      }
+      throw Exception("error.loginFailed"); // fallback
     }
   }
 
@@ -57,8 +61,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     if (response.statusCode != 200 && response.statusCode != 201) {
       final decoded = jsonDecode(response.body);
-      final errorMessage = decoded['response']?['message'] ?? 'Kayıt başarısız oldu';
-      throw Exception("Sunucu hatası: $errorMessage");
+      final errorMessage = decoded['response']?['message'];
+
+      if (errorMessage != null &&
+          errorMessage.toString().toLowerCase().contains('exists')) {
+        throw Exception("error.registerUserAlreadyExists"); // intl key
+      }
+      throw Exception("error.registerFailed"); // fallback
     }
   }
 }

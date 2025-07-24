@@ -1,18 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../domain/entities/movie_page_result.dart';
-import '../../../domain/entities/favorite_movie_entity.dart'; // ✅ Favori Entity
+import '../../../domain/entities/favorite_movie_entity.dart';
 import '../models/movie_model.dart';
-import '../models/favorite_movie_model.dart'; // ✅ Favori Model
+import '../models/favorite_movie_model.dart';
 
 abstract class MovieRemoteDataSource {
   Future<MoviePageResult> getMovies({int page = 1, required String token});
-
-  Future<void> toggleFavoriteMovie({
-    required String token,
-    required String movieId,
-  });
-
+  Future<void> toggleFavoriteMovie({required String token, required String movieId});
   Future<List<FavoriteMovieEntity>> getFavoriteMovies(String token);
 }
 
@@ -62,7 +57,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       );
     } else {
       print('❌ Failed to load movie list, status: ${response.statusCode}');
-      throw Exception('Failed to load movie list, status: ${response.statusCode}');
+      throw Exception('error.loadMovieListFailed');
     }
   }
 
@@ -83,7 +78,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
     print('📡 Toggle response status: ${response.statusCode}');
     if (response.statusCode != 200) {
-      throw Exception('Failed to toggle favorite movie');
+      throw Exception('error.toggleFavoriteFailed');
     }
   }
 
@@ -111,7 +106,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       print('✅ Favori film sayısı: ${favorites.length}');
       return favorites;
     } else {
-      throw Exception('Failed to fetch favorite movies');
+      throw Exception('error.getFavoritesFailed');
     }
   }
 }

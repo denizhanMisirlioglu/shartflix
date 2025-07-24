@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CompactFavoriteCard extends StatelessWidget {
   final String title;
@@ -52,8 +53,13 @@ class CompactFavoriteCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  title.isNotEmpty ? title : 'Başlık bulunamadı',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  title.isNotEmpty
+                      ? title
+                      : AppLocalizations.of(context)!.titleNotFound,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../blocs/popular_movies_bloc/movie_bloc.dart';
 import '../blocs/popular_movies_bloc/movie_event.dart';
 import '../blocs/popular_movies_bloc/movie_state.dart';
@@ -29,6 +31,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, movieState) {
@@ -75,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                           isFavorite: isFavorite,
                           onFavoriteToggle: () {
                             context.read<FavoriteMovieBloc>().add(
-                              ToggleFavoriteMovie(widget.token, movie.id), // ✅ positional olarak çağrıldı
+                              ToggleFavoriteMovie(widget.token, movie.id),
                             );
                           },
                         );
@@ -84,7 +88,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               } else if (movieState is MovieError) {
-                return Center(child: Text(movieState.message));
+                return Center(
+                  child: Text(
+                    '${loc.movieLoadError}\n${movieState.message}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
               } else {
                 return const SizedBox();
               }

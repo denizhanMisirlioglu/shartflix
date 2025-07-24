@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import '../blocs/upload_photo_bloc/upload_photo_bloc.dart';
 import '../blocs/upload_photo_bloc/upload_photo_event.dart';
@@ -42,16 +43,18 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return BlocConsumer<UploadPhotoBloc, UploadPhotoState>(
       listener: (context, state) {
         if (state is UploadPhotoSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Fotoğraf yüklendi ✅')),
+            SnackBar(content: Text(local.photoUploadSuccess)),
           );
           Navigator.pop(context, true);
         } else if (state is UploadPhotoFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Hata: ${state.message}')),
+            SnackBar(content: Text('${local.photoUploadErrorPrefix} ${state.message}')),
           );
         }
       },
@@ -83,9 +86,9 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                           ),
                         ),
                       ),
-                      const Text(
-                        'Profil Detayı',
-                        style: TextStyle(
+                      Text(
+                        local.profileDetailTitle,
+                        style: const TextStyle(
                           fontFamily: 'EuclidCircularA',
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
@@ -96,9 +99,9 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                const Text(
-                  'Fotoğraflarınızı Yükleyin',
-                  style: TextStyle(
+                Text(
+                  local.uploadPhotoTitle,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -106,11 +109,11 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Text(
-                    'Resources out incentivize relaxation floor loss cc.',
-                    style: TextStyle(
+                    local.uploadPhotoSubtitle,
+                    style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 12,
                       fontFamily: 'EuclidCircularA',
@@ -157,9 +160,9 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                       ),
                       child: state is UploadPhotoLoading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                        'Devam Et',
-                        style: TextStyle(
+                          : Text(
+                        local.continueButton,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

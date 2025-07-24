@@ -1,7 +1,8 @@
-// ⬇️ Güncellenmiş ProfilePage (Figma ile birebir uyumlu + Bottom Sheet entegrasyonu)
+// ⬇️ Güncellenmiş ProfilePage (intl ile lokalizasyon eklenmiş)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../injection_container.dart';
 import '../blocs/user_profile_bloc/user_profile_bloc.dart';
@@ -27,6 +28,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<UserProfileBloc>(
@@ -83,13 +86,13 @@ class ProfilePage extends StatelessWidget {
                               color: const Color(0xFFE50914),
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: const Row(
+                            child: Row(
                               children: [
-                                Icon(Icons.local_offer, size: 16, color: Colors.white),
-                                SizedBox(width: 4),
+                                const Icon(Icons.local_offer, size: 16, color: Colors.white),
+                                const SizedBox(width: 4),
                                 Text(
-                                  'Sınırlı Teklif',
-                                  style: TextStyle(
+                                  local.limitedOfferButton,
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
@@ -101,9 +104,9 @@ class ProfilePage extends StatelessWidget {
                         )
                       ],
                     ),
-                    const Text(
-                      'Profil Detayı',
-                      style: TextStyle(
+                    Text(
+                      local.profileTitle,
+                      style: const TextStyle(
                         fontFamily: 'EuclidCircularA',
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
@@ -175,9 +178,9 @@ class ProfilePage extends StatelessWidget {
                               ),
                               minimumSize: const Size(121, 36),
                             ),
-                            child: const Text(
-                              'Fotoğraf Ekle',
-                              style: TextStyle(color: Colors.white),
+                            child: Text(
+                              local.addPhotoButton,
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ],
@@ -188,11 +191,11 @@ class ProfilePage extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 10),
-                const Align(
+                Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Beğendiğim Filmler',
-                    style: TextStyle(
+                    local.favoriteMoviesHeader,
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'EuclidCircularA',
@@ -207,12 +210,20 @@ class ProfilePage extends StatelessWidget {
                     if (state is FavoriteMovieLoading) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is FavoriteMovieError) {
-                      return Center(child: Text('Hata: ${state.message}', style: TextStyle(color: Colors.white)));
+                      return Center(
+                        child: Text(
+                          "${local.errorPrefix} ${state.message}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
                     } else if (state is FavoriteMovieLoaded) {
                       final movies = state.movies;
                       if (movies.isEmpty) {
-                        return const Center(
-                          child: Text("Henüz favori film yok.", style: TextStyle(color: Colors.white)),
+                        return Center(
+                          child: Text(
+                            local.noFavoriteMovies,
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         );
                       }
                       return GridView.count(

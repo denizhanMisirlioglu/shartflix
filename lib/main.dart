@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:shartflix/core/utils/token_storage.dart';
 import 'package:shartflix/presentation/pages/login_page.dart';
 import 'package:shartflix/presentation/pages/main_navigation_page.dart';
@@ -10,9 +13,7 @@ import 'presentation/blocs/login_bloc/login_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
   await di.init();
-
 
   // final tokenStorage = di.sl<TokenStorage>();
   // final token = await tokenStorage.getToken();
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Shartflix',
         debugShowCheckedModeBanner: false,
+        locale: const Locale('tr'), // Varsayılanı Türkçe olarak belirledik
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         home: const LoginPage(),
       ),
     );

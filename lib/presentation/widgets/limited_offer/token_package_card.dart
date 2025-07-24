@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../../constants/colors.dart';
 import '../../../constants/text_styles.dart';
 
 class TokenPackageCard extends StatelessWidget {
-  final String discountText; // örnek: %70
-  final Color badgeColor; // örnek: AppColors.gradientStart
+  final String discountText;
+  final Color badgeColor;
   final String oldToken;
   final String newToken;
   final String price;
@@ -27,7 +29,6 @@ class TokenPackageCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // 🎯 Kart Gövdesi
           Container(
             width: 115,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -63,8 +64,8 @@ class TokenPackageCard extends StatelessWidget {
                   style: AppTextStyles.tokenBig,
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  "Jeton",
+                Text(
+                  AppLocalizations.of(context)!.tokenLabel,
                   style: AppTextStyles.sectionTitle,
                 ),
                 const SizedBox(height: 16),
@@ -73,16 +74,14 @@ class TokenPackageCard extends StatelessWidget {
                   style: AppTextStyles.price,
                 ),
                 const SizedBox(height: 2),
-                const Text(
-                  "Başına haftalık",
+                Text(
+                  AppLocalizations.of(context)!.perWeekLabel,
                   style: AppTextStyles.perWeek,
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
-
-          // 🔖 Yüzde Etiketi
           Positioned(
             top: -14,
             left: 0,
