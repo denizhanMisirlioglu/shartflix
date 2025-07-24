@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart'; // ✅ Eklendi
 import 'package:shartflix/constants/app_padding.dart';
 import 'package:shartflix/constants/colors.dart';
 import 'package:shartflix/constants/text_styles.dart';
@@ -43,9 +44,30 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: BlocConsumer<RegisterBloc, RegisterState>(
                       listener: (context, state) {
                         if (state is RegisterSuccess) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (_) => const LoginPage()),
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => Dialog(
+                              backgroundColor: Colors.transparent,
+                              child: SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: Lottie.asset(
+                                  'assets/lottie/success.json',
+                                  repeat: false,
+                                  fit: BoxFit.contain,
+                                  onLoaded: (composition) {
+                                    Future.delayed(composition.duration, () {
+                                      Navigator.of(context).pop(); // dialogu kapat
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => const LoginPage()),
+                                      );
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
                           );
                         } else if (state is RegisterFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(

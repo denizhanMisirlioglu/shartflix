@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart'; // ✅ Eklendi
 import 'package:shartflix/constants/app_padding.dart';
 import 'package:shartflix/constants/colors.dart';
 import 'package:shartflix/constants/text_styles.dart';
@@ -12,7 +13,7 @@ import '../blocs/login_bloc/login_evet.dart';
 import '../blocs/register_bloc/register_bloc.dart';
 import '../widgets/auth/custom_input_field.dart';
 import '../widgets/auth/social_icon_group.dart';
-import '../widgets/auth/form_header.dart'; // ✅ Eklendi
+import '../widgets/auth/form_header.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -43,13 +44,35 @@ class _LoginPageState extends State<LoginPage> {
                     child: BlocConsumer<LoginBloc, LoginState>(
                       listener: (context, state) {
                         if (state is LoginSuccess) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => MainNavigationPage(token: state.token),
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => Dialog(
+                              backgroundColor: Colors.transparent,
+                              child: SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: Lottie.asset(
+                                  'assets/lottie/success.json',
+                                  repeat: false,
+                                  fit: BoxFit.contain,
+                                  onLoaded: (composition) {
+                                    Future.delayed(composition.duration, () {
+                                      Navigator.of(context).pop(); // dialogu kapat
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => MainNavigationPage(token: state.token),
+                                        ),
+                                      );
+                                    });
+                                  },
+                                ),
+                              ),
                             ),
                           );
-                        } else if (state is LoginFailure) {
+                        }
+                        else if (state is LoginFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Hata: ${state.message}")),
                           );
@@ -60,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const SizedBox(height: 100),
-                            const FormHeader( // ✅ Ortak başlık
+                            const FormHeader(
                               title: "Merhabalar",
                               subtitle: "Tempus varius a vitae interdum id\ntortor elementum tristique eleifend at.",
                             ),

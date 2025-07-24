@@ -19,6 +19,8 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   image_picker: ^1.0.4
   cupertino_icons: ^1.0.8
+  lottie: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +43,7 @@ flutter:
     - assets/backup_posters/
     - assets/icons/limited_offer/
     - assets/images/glow_effect_circle.png
+    - assets/lottie/success.json
 
 flutter_native_splash:
   color: "#000000"
