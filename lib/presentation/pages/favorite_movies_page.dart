@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../domain/entities/favorite_movie_entity.dart';
 import '../../../injection_container.dart';
 import '../blocs/favorite_movie_bloc/favorite_movie_bloc.dart';

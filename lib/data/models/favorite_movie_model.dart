@@ -18,8 +18,8 @@ class FavoriteMovieModel extends FavoriteMovieEntity {
     final title = json['Title']?.toString();
     final posterUrl = json['Poster']?.toString();
 
-    print('✅ Parsed title: $title');
-    print('✅ Parsed posterUrl: $posterUrl');
+    print(' Parsed title: $title');
+    print(' Parsed posterUrl: $posterUrl');
 
     return FavoriteMovieModel(
       id: json['id']?.toString() ?? '',
@@ -45,7 +45,7 @@ class FavoriteMovieModel extends FavoriteMovieEntity {
     );
   }
 
-  /// ✅ Eksik olan toEntity metodu eklendi:
+
   FavoriteMovieEntity toEntity() {
     return FavoriteMovieEntity(
       id: id,

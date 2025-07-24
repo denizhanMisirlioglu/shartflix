@@ -19,7 +19,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   @override
   Future<MoviePageResult> getMovies({int page = 1, required String token}) async {
     final url = 'https://caseapi.servicelabs.tech/movie/list?page=$page';
-    print('🌐 [GET] Request to: $url');
+    print(' [GET] Request to: $url');
 
     final response = await client.get(
       Uri.parse(url),
@@ -29,7 +29,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       },
     );
 
-    print('📡 Movie list response status: ${response.statusCode}');
+    print(' Movie list response status: ${response.statusCode}');
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
@@ -39,7 +39,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       final currentPage = data['currentPage'] ?? 1;
       final totalPages = data['totalPages'] ?? 1;
 
-      print('✅ API response parsed');
+      print(' API response parsed');
       print('📄 currentPage: $currentPage | totalPages: $totalPages | movies.length: ${moviesJson.length}');
 
       final movies = (moviesJson as List)
@@ -47,7 +47,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
           .toList();
 
       for (var movie in movies) {
-        print('🎬 [Movie] ${movie.title} → posterUrl: ${movie.posterUrl}');
+        print(' [Movie] ${movie.title} → posterUrl: ${movie.posterUrl}');
       }
 
       return MoviePageResult(
@@ -56,7 +56,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         totalPages: totalPages,
       );
     } else {
-      print('❌ Failed to load movie list, status: ${response.statusCode}');
+      print(' Failed to load movie list, status: ${response.statusCode}');
       throw Exception('error.loadMovieListFailed');
     }
   }
@@ -67,7 +67,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
     required String movieId,
   }) async {
     final url = 'https://caseapi.servicelabs.tech/movie/favorite/$movieId';
-    print('❤️ [POST] Toggle favorite → $url');
+    print(' [POST] Toggle favorite → $url');
 
     final response = await client.post(
       Uri.parse(url),
@@ -76,7 +76,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       },
     );
 
-    print('📡 Toggle response status: ${response.statusCode}');
+    print(' Toggle response status: ${response.statusCode}');
     if (response.statusCode != 200) {
       throw Exception('error.toggleFavoriteFailed');
     }
@@ -85,7 +85,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   @override
   Future<List<FavoriteMovieEntity>> getFavoriteMovies(String token) async {
     final url = 'https://caseapi.servicelabs.tech/movie/favorites';
-    print('⭐ [GET] Fetch favorites → $url');
+    print(' [GET] Fetch favorites → $url');
 
     final response = await client.get(
       Uri.parse(url),
@@ -94,7 +94,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       },
     );
 
-    print('📡 Favorites response status: ${response.statusCode}');
+    print(' Favorites response status: ${response.statusCode}');
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
       final data = decoded['data'] ?? [];
@@ -103,7 +103,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
           .map((json) => FavoriteMovieModel.fromJson(json).toEntity())
           .toList();
 
-      print('✅ Favori film sayısı: ${favorites.length}');
+      print(' Favori film sayısı: ${favorites.length}');
       return favorites;
     } else {
       throw Exception('error.getFavoritesFailed');

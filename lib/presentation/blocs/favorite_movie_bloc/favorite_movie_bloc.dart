@@ -23,10 +23,10 @@ class FavoriteMovieBloc extends Bloc<FavoriteMovieEvent, FavoriteMovieState> {
     emit(FavoriteMovieLoading());
     try {
       final movies = await getFavorites(event.token);
-      print("✅ Bloc: LoadFavoriteMovies → ${movies.length} favori film bulundu");
+      print(" Bloc: LoadFavoriteMovies → ${movies.length} favori film bulundu");
       emit(FavoriteMovieLoaded(movies));
     } catch (e) {
-      print("🔴 Bloc: Favori listeleme hatası: $e");
+      print(" Bloc: Favori listeleme hatası: $e");
       emit(FavoriteMovieError(e.toString()));
     }
   }
@@ -35,16 +35,16 @@ class FavoriteMovieBloc extends Bloc<FavoriteMovieEvent, FavoriteMovieState> {
       ToggleFavoriteMovie event,
       Emitter<FavoriteMovieState> emit,
       ) async {
-    print("🟢 Bloc: ToggleFavoriteMovie event alındı → movieId: ${event.movieId}");
+    print(" Bloc: ToggleFavoriteMovie event alındı → movieId: ${event.movieId}");
 
     try {
       await toggleFavorite(event.token, event.movieId);
-      print("🟢 Bloc: Favori API çağrısı tamamlandı");
+      print(" Bloc: Favori API çağrısı tamamlandı");
 
       add(LoadFavoriteMovies(event.token));
-      print("🔄 Bloc: Favori listesi tekrar yükleniyor");
+      print(" Bloc: Favori listesi tekrar yükleniyor");
     } catch (e) {
-      print("🔴 Bloc: Favori işlemi hatası: $e");
+      print(" Bloc: Favori işlemi hatası: $e");
       emit(FavoriteMovieError(e.toString()));
     }
   }

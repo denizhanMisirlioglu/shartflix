@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../injection_container.dart';
 import '../blocs/user_profile_bloc/user_profile_bloc.dart';
 import '../blocs/user_profile_bloc/user_profile_event.dart';

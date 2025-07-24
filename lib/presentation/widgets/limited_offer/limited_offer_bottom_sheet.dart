@@ -16,7 +16,7 @@ class LimitedOfferBottomSheet extends StatelessWidget {
       children: [
         // Yarı saydam siyah layer (gerçek opacity)
         Opacity(
-          opacity: 0.80, // Burada oranı ayarlayabilirsin (0.70-0.95 arası dene)
+          opacity: 0.80,
           child: Container(color: Colors.black),
         ),
 

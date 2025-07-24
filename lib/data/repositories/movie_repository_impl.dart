@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import '../../domain/entities/movie_page_result.dart';
-import '../../domain/entities/movie_entity.dart';
 import '../../domain/repositories/movie_repository.dart';
 import '../../../core/error/failure.dart';
 import '../data_sources/movie_remote_data_source.dart';

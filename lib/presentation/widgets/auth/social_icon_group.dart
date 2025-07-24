@@ -12,7 +12,7 @@ class SocialIconGroup extends StatelessWidget {
       runSpacing: 12,
       children: const [
         SocialIcon(assetPath: 'assets/icons/google_icon.png'),
-        SocialIcon(assetPath: 'assets/icons/apple_icon.png'), // varsa
+        SocialIcon(assetPath: 'assets/icons/apple_icon.png'),
         SocialIcon(assetPath: 'assets/icons/facebook_icon.png'),
       ],
     );

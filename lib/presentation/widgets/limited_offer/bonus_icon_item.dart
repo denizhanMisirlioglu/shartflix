@@ -15,7 +15,7 @@ class BonusIconItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double iconSize = isLarge ? 36 : 28; // 🔹 Sadece ikon büyür
+    final double iconSize = isLarge ? 36 : 28; //  Sadece ikon büyür
 
     return Column(
       children: [

@@ -37,7 +37,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<UploadPhotoModel> uploadPhoto(File file, String token) async {
     final uri = Uri.parse('https://caseapi.servicelabs.tech/user/upload_photo');
-    print('📡 DataSource: Fotoğraf yükleme isteği hazırlanıyor → ${file.path}');
+    print(' DataSource: Fotoğraf yükleme isteği hazırlanıyor → ${file.path}');
 
     final request = http.MultipartRequest('POST', uri);
     request.headers['Authorization'] = 'Bearer $token';
@@ -51,12 +51,12 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       contentType: mediaType,
     ));
 
-    print('📡 DataSource: İstek gönderiliyor...');
+    print(' DataSource: İstek gönderiliyor...');
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
 
-    print('📡 Upload yanıt status: ${response.statusCode}');
-    print('📡 Upload response body: ${response.body}');
+    print(' Upload yanıt status: ${response.statusCode}');
+    print(' Upload response body: ${response.body}');
 
     if (response.statusCode == 200) {
       final jsonMap = json.decode(response.body);

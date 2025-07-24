@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:shartflix/core/error/exception.dart';
 import 'package:shartflix/core/error/failure.dart';
 import 'package:shartflix/domain/entities/login_entity.dart';
 import 'package:shartflix/domain/repositories/auth_repository.dart';

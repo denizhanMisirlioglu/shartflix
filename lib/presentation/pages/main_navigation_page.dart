@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:shartflix/presentation/pages/profile_page.dart';
-
 import '../../data/data_sources/movie_remote_data_source.dart';
 import '../../data/repositories/movie_repository_impl.dart';
 import '../../domain/use_cases/get_movies.dart';
 import '../../presentation/blocs/popular_movies_bloc/movie_bloc.dart';
-
 import '../../data/data_sources/favorite_movie_remote_data_source.dart';
 import '../../data/repositories/favorite_movie_reposityory_impl.dart';
 import '../../domain/use_cases/get_favorite_movies.dart';
 import '../../domain/use_cases/toggle_favorite_movie.dart';
 import '../../presentation/blocs/favorite_movie_bloc/favorite_movie_bloc.dart';
 import '../../presentation/blocs/favorite_movie_bloc/favorite_movie_event.dart';
-
 import 'home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../../constants/colors.dart';

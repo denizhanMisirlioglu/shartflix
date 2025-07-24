@@ -23,8 +23,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }),
     );
 
-    print('📡 Login response status: ${response.statusCode}');
-    print('📡 Login response body: ${response.body}');
+    print(' Login response status: ${response.statusCode}');
+    print(' Login response body: ${response.body}');
 
     final decoded = jsonDecode(response.body);
 

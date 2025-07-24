@@ -1,7 +1,6 @@
 import '../../domain/entities/favorite_movie_entity.dart';
 import '../../domain/repositories/favorite_movie_repository.dart';
 import '../data_sources/favorite_movie_remote_data_source.dart';
-import '../models/favorite_movie_model.dart';
 
 class FavoriteMovieRepositoryImpl implements FavoriteMovieRepository {
   final FavoriteMovieRemoteDataSource remoteDataSource;
@@ -21,7 +20,7 @@ class FavoriteMovieRepositoryImpl implements FavoriteMovieRepository {
   Future<List<FavoriteMovieEntity>> getFavoriteMovies(String token) async {
     try {
       final models = await remoteDataSource.getFavoriteMovies(token);
-      return models.map((model) => model.toEntity()).toList(); // ✅ Gerekli dönüşüm
+      return models.map((model) => model.toEntity()).toList();
     } catch (e) {
       throw Exception('Favori filmler alınamadı: $e');
     }

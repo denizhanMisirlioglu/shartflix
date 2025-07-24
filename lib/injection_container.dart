@@ -23,7 +23,7 @@ import 'presentation/blocs/popular_movies_bloc/movie_bloc.dart';
 
 // FAVORITES
 import 'data/data_sources/favorite_movie_remote_data_source.dart';
-import 'data/repositories/favorite_movie_reposityory_impl.dart'; // yazım hatalı dosya adı ama bozulmadan bırakıldı
+import 'data/repositories/favorite_movie_reposityory_impl.dart';
 import 'domain/repositories/favorite_movie_repository.dart';
 import 'domain/use_cases/get_favorite_movies.dart';
 import 'domain/use_cases/toggle_favorite_movie.dart';
@@ -67,7 +67,7 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthRepository>(
           () => AuthRepositoryImpl(remoteDataSource: sl()));
   sl.registerLazySingleton<FavoriteMovieRepository>(
-          () => FavoriteMovieRepositoryImpl(remoteDataSource: sl())); // class adı doğru
+          () => FavoriteMovieRepositoryImpl(remoteDataSource: sl()));
   sl.registerLazySingleton<UserRepository>(
           () => UserRepositoryImpl(remoteDataSource: sl()));
 

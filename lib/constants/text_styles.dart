@@ -19,7 +19,7 @@ class AppTextStyles {
     fontFamily: 'Euclid Circular A',
   );
 
-  // 🔤 Bonus başlığı (Alacağınız Bonuslar / Jeton Seçimi)
+  //  Bonus başlığı (Alacağınız Bonuslar / Jeton Seçimi)
   static const TextStyle sectionTitle = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w500,
@@ -34,7 +34,7 @@ class AppTextStyles {
     height: 1.3,
   );
 
-  // 💰 Kart Üzeri Büyük Jeton Sayısı
+  //  Kart Üzeri Büyük Jeton Sayısı
   static const TextStyle tokenBig = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
@@ -42,7 +42,7 @@ class AppTextStyles {
     fontFamily: 'Euclid Circular A',
   );
 
-  // 🧾 Üstü çizili eski jeton sayısı
+  //  Üstü çizili eski jeton sayısı
   static const TextStyle tokenOld = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w500,
@@ -51,7 +51,7 @@ class AppTextStyles {
     fontFamily: 'Euclid Circular A',
   );
 
-  // 💸 Fiyat
+  //  Fiyat
   static const TextStyle price = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w900,
@@ -59,7 +59,7 @@ class AppTextStyles {
     fontFamily: 'Montserrat',
   );
 
-  // 🗓️ "Başına haftalık"
+  //  "Başına haftalık"
   static const TextStyle perWeek = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,
@@ -68,7 +68,7 @@ class AppTextStyles {
     fontFamily: 'Euclid Circular A',
   );
 
-  // 🔖 % indirim rozeti içi
+  //  % indirim rozeti içi
   static const TextStyle discountBadge = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.bold,
@@ -76,7 +76,7 @@ class AppTextStyles {
     fontFamily: 'Euclid Circular A',
   );
 
-  // 🔴 Buton
+  //  Buton
   static const TextStyle buttonText = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -113,7 +113,7 @@ class AppTextStyles {
     color: AppColors.white,
   );
 
-  // 🎬 Discover Movie Card
+  //  Discover Movie Card
   static const TextStyle movieTitle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w600,
