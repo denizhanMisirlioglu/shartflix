@@ -48,8 +48,11 @@ class BonusIconItem extends StatelessWidget {
           label,
           style: AppTextStyles.bonusLabel,
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
   }
 }
+

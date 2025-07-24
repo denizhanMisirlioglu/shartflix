@@ -68,23 +68,23 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          BonusIconItem(
+                          Expanded(child: BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/premium.png',
                             label: AppLocalizations.of(context)!.bonusPremiumAccount,
                             isLarge: true,
-                          ),
-                          BonusIconItem(
+                          )),
+                          Expanded(child: BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/match.png',
                             label: AppLocalizations.of(context)!.bonusMoreMatches,
-                          ),
-                          BonusIconItem(
+                          )),
+                          Expanded(child: BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/boost.png',
                             label: AppLocalizations.of(context)!.bonusBoost,
-                          ),
-                          BonusIconItem(
+                          )),
+                          Expanded(child: BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/like.png',
                             label: AppLocalizations.of(context)!.bonusMoreLikes,
-                          ),
+                          )),
                         ],
                       ),
                     ],
@@ -92,7 +92,7 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(AppLocalizations.of(context)!.selectTokenPackageTitle, style: AppTextStyles.sectionTitle),
-                const SizedBox(height: 16),
+                const SizedBox(height: 32), // <-- BURASI ARTIK 32
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
