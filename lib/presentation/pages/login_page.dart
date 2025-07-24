@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart'; // ✅ Eklendi
+import 'package:lottie/lottie.dart';
 import 'package:shartflix/constants/app_padding.dart';
 import 'package:shartflix/constants/colors.dart';
 import 'package:shartflix/constants/text_styles.dart';
@@ -9,7 +9,7 @@ import 'package:shartflix/presentation/blocs/login_bloc/login_state.dart';
 import 'package:shartflix/presentation/pages/main_navigation_page.dart';
 import 'package:shartflix/presentation/pages/register_page.dart';
 import '../../injection_container.dart';
-import '../blocs/login_bloc/login_evet.dart';
+import '../blocs/login_bloc/login_event.dart';
 import '../blocs/register_bloc/register_bloc.dart';
 import '../widgets/auth/custom_input_field.dart';
 import '../widgets/auth/social_icon_group.dart';
@@ -26,6 +26,18 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isPasswordHidden = true;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController.addListener(() => setState(() {}));
+    passwordController.addListener(() => setState(() {}));
+  }
+
+  bool get _isLoginButtonEnabled {
+    return emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,23 +70,27 @@ class _LoginPageState extends State<LoginPage> {
                                   fit: BoxFit.contain,
                                   onLoaded: (composition) {
                                     Future.delayed(composition.duration, () {
-                                      Navigator.of(context).pop(); // dialogu kapat
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => MainNavigationPage(token: state.token),
-                                        ),
-                                      );
+                                      if (context.mounted) {
+                                        Navigator.of(context).pop();
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => MainNavigationPage(token: state.token),
+                                          ),
+                                        );
+                                      }
                                     });
                                   },
                                 ),
                               ),
                             ),
                           );
-                        }
-                        else if (state is LoginFailure) {
+                        } else if (state is LoginFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Hata: ${state.message}")),
+                            const SnackBar(
+                              content: Text("E-posta veya şifre yanlış."),
+                              backgroundColor: Colors.redAccent,
+                            ),
                           );
                         }
                       },
@@ -128,15 +144,29 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: state is LoginLoading
                                     ? null
                                     : () {
+                                  final email = emailController.text.trim();
+                                  final password = passwordController.text.trim();
+
+                                  if (email.isEmpty || password.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Lütfen e-posta ve şifre alanlarını doldurun."),
+                                        backgroundColor: Colors.redAccent,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
                                   context.read<LoginBloc>().add(
                                     LoginButtonPressed(
-                                      email: emailController.text.trim(),
-                                      password: passwordController.text.trim(),
+                                      email: email,
+                                      password: password,
                                     ),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.brandRed,
+                                  foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(AppPadding.inputRadius),
                                   ),

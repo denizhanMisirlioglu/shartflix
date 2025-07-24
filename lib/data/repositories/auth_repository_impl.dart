@@ -16,8 +16,8 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final model = await remoteDataSource.login(email, password);
       return Right(model.toEntity());
-    } on ServerException {
-      return Left(ServerFailure());
+    } on Exception catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 
@@ -25,9 +25,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, void>> register(String email, String password, String fullName) async {
     try {
       await remoteDataSource.register(email, password, fullName);
-      return const Right(null); // boş başarı
-    } on ServerException {
-      return Left(ServerFailure());
+      return const Right(null);
+    } on Exception catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

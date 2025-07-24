@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shartflix/data/models/login_model.dart';
-import 'package:shartflix/core/error/exception.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginModel> login(String email, String password);
@@ -37,13 +36,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return LoginModel.fromJson(data);
     } else {
       final errorMessage = decoded['response']?['message'] ?? 'Bilinmeyen hata';
-      throw Exception('Sunucu hatası: $errorMessage');
+      throw Exception("Sunucu hatası: $errorMessage"); // ✅ Basit hata mesajı
     }
   }
-
-
-
-
 
   @override
   Future<void> register(String email, String password, String fullName) async {
@@ -53,7 +48,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       body: jsonEncode({
         'email': email,
         'password': password,
-        'name': fullName, // 🔧 DÜZELTİLDİ
+        'name': fullName,
       }),
     );
 
@@ -61,10 +56,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     print("📡 Register response body: ${response.body}");
 
     if (response.statusCode != 200 && response.statusCode != 201) {
-      throw ServerException();
+      final decoded = jsonDecode(response.body);
+      final errorMessage = decoded['response']?['message'] ?? 'Kayıt başarısız oldu';
+      throw Exception("Sunucu hatası: $errorMessage");
     }
-
   }
-
-
 }
