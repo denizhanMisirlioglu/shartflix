@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shartflix/constants/colors.dart';
 
 import '../blocs/popular_movies_bloc/movie_bloc.dart';
 import '../blocs/popular_movies_bloc/movie_event.dart';
@@ -34,12 +35,16 @@ class _HomePageState extends State<HomePage> {
     final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
+      backgroundColor: Colors.black, // Koyu arka plan
       body: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, movieState) {
           return BlocBuilder<FavoriteMovieBloc, FavoriteMovieState>(
             builder: (context, favoriteState) {
               if (movieState is MovieLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Container(
+                  color: Colors.black, // Yükleme sırasında da koyu arka plan
+                  child: const Center(child: CircularProgressIndicator()),
+                );
               } else if (movieState is MovieLoaded) {
                 final movies = movieState.movies;
                 final canLoadMore = movieState.canLoadMore;
@@ -50,6 +55,8 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 return RefreshIndicator(
+                  color: AppColors.white, // istersen loader rengini de ayarla
+                  backgroundColor: AppColors.backgroundDark, // istersen loader arka planı
                   onRefresh: () async {
                     context.read<MovieBloc>().add(FetchMovies(token: widget.token));
                     context.read<FavoriteMovieBloc>().add(LoadFavoriteMovies(widget.token));
@@ -66,7 +73,10 @@ class _HomePageState extends State<HomePage> {
                       itemCount: canLoadMore ? movies.length + 1 : movies.length,
                       itemBuilder: (context, index) {
                         if (index >= movies.length) {
-                          return const Center(child: CircularProgressIndicator());
+                          return Container(
+                            color: Colors.black, // Yükleme sırasında da koyu arka plan
+                            child: const Center(child: CircularProgressIndicator()),
+                          );
                         }
 
                         final movie = movies[index];
@@ -88,11 +98,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               } else if (movieState is MovieError) {
-                return Center(
-                  child: Text(
-                    '${loc.movieLoadError}\n${movieState.message}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white),
+                return Container(
+                  color: Colors.black, // Hata ekranı da koyu
+                  child: Center(
+                    child: Text(
+                      '${loc.movieLoadError}\n${movieState.message}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                 );
               } else {
