@@ -76,6 +76,7 @@ class LimitedOfferBottomSheet extends StatelessWidget {
                           BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/premium.png',
                             label: 'Premium\nHesap',
+                            isLarge: true,
                           ),
                           BonusIconItem(
                             iconPath: 'assets/icons/limited_offer/match.png',

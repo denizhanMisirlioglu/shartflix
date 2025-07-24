@@ -4,15 +4,19 @@ import '../../../constants/text_styles.dart';
 class BonusIconItem extends StatelessWidget {
   final String iconPath;
   final String label;
+  final bool isLarge;
 
   const BonusIconItem({
     Key? key,
     required this.iconPath,
     required this.label,
+    this.isLarge = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final double iconSize = isLarge ? 36 : 28; // 🔹 Sadece ikon büyür
+
     return Column(
       children: [
         Container(
@@ -33,8 +37,8 @@ class BonusIconItem extends StatelessWidget {
           child: Center(
             child: Image.asset(
               iconPath,
-              width: 28,
-              height: 28,
+              width: iconSize,
+              height: iconSize,
               fit: BoxFit.contain,
             ),
           ),
